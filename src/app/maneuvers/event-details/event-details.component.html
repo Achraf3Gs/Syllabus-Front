@@ -1,0 +1,246 @@
+<div class="row mb-1 me-0 custom-border p-0">
+  <!-- Maneuver Name Section -->
+  <div class="col-md-4 d-flex align-items-center justify-content-center border-right">
+    <div class="text-center w-100">
+      <div class="d-flex align-items-center mb-2">
+        <fa-icon [icon]="faInfo" class="me-2 blue-color"></fa-icon>
+        <span>{{ maneuverItem.name }}</span>
+      </div>
+    </div>
+  </div>
+
+  <div
+    class="col-md-6 d-flex align-items-center justify-content-center border-right"
+  >
+    <div class="text-center w-100">
+      <div class="d-flex align-items-center mb-2">
+        <!-- CTS Button Trigger -->
+        <button
+          type="button"
+          class="btn btn-link p-0 w-100"
+          data-bs-toggle="modal"
+          [attr.data-bs-target]="'#modal_' + maneuverItem.id"
+        >
+          <fa-icon [icon]="faPen"></fa-icon><br />
+          CTS
+        </button>
+
+
+        <!-- Modify Button -->
+        <button
+          type="button"
+          class="btn btn-link p-0 w-100"
+          data-bs-toggle="modal"
+          [attr.data-bs-target]="'#modifyModal_' + maneuverItem.id"
+        >
+          <fa-icon [icon]="faEdit"></fa-icon><br />
+          Modify Maneuver
+        </button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Delete Button -->
+  <div class="col-md-2 d-flex align-items-center justify-content-center">
+    <div class="w-100 text-center">
+      <div class="row">
+        <div class="col-6">
+          <button
+            type="button"
+            class="btn btn-link p-0 w-100"
+            (click)="deleteManeuverItem(maneuverItem.id)"
+          >
+            <fa-icon [icon]="faEraser"></fa-icon><br />
+            Delete
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- View CTS Modal -->
+<div
+  class="modal fade"
+  [id]="'modal_' + maneuverItem.id"
+  tabindex="-1"
+  [attr.aria-labelledby]="'ctsModalLabel__' + maneuverItem.id"
+
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-scrollable modal-extra-wide">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" [id]="'ctsModalLabel_' + maneuverItem.id">
+          {{ maneuverItem.name }}
+        </h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body text-left">
+        <h4>Course Training Standards (CTS):</h4>
+        <div *ngFor="let phase of maneuverItem.cts.availablePhases">
+          <h5 class="mt-3 text-primary text-uppercase">Phase: {{ phase }}</h5>
+          <table class="table table-bordered text-center">
+            <thead>
+              <tr>
+                <th class="bg-primary text-white">Maneuver</th>
+                <th class="bg-danger text-white">U</th>
+                <th class="bg-warning text-dark">F</th>
+                <th class="bg-warning text-dark">G</th>
+                <th class="bg-success text-white">E</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>{{ maneuverItem.name }}</td>
+                <td>
+                  <ul>
+                    <li *ngFor="let crit of maneuverItem.cts.unsatisfactoryCriteria[phase]">
+                      {{ crit }}
+                    </li>
+                  </ul>
+                </td>
+                <td>
+                  <ul>
+                    <li *ngFor="let crit of maneuverItem.cts.fairCriteria[phase]">
+                      {{ crit }}
+                    </li>
+                  </ul>
+                </td>
+                <td>
+                  <ul>
+                    <li *ngFor="let crit of maneuverItem.cts.goodCriteria[phase]">
+                      {{ crit }}
+                    </li>
+                  </ul>
+                </td>
+                <td>
+                  <ul>
+                    <li *ngFor="let crit of maneuverItem.cts.excellentCriteria[phase]">
+                      {{ crit }}
+                    </li>
+                  </ul>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          data-bs-dismiss="modal"
+        >
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modify CTS Modal -->
+<div
+  class="modal fade"
+  [id]="'modifyModal_' + maneuverItem.id"
+  tabindex="-1"
+  [attr.aria-labelledby]="'modifyLabel_' + maneuverItem.id"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-extra-wide full-width-table">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" [id]="'modifyLabel_' + maneuverItem.id">
+          {{ maneuverItem.name }}
+        </h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <h4>Course Training Standards (CTS):</h4>
+        <div *ngFor="let phase of maneuverItem.cts.availablePhases" class="mb-4">
+          <h5 class="mt-3 text-primary text-uppercase">Phase: {{ phase }}</h5>
+          <div style="overflow-x: auto;">
+            <table class="table table-bordered text-center full-width-table">
+              <thead>
+                <tr>
+                  <th class="bg-primary text-white">Maneuver</th>
+                  <th class="bg-danger text-white">U</th>
+                  <th class="bg-warning text-dark">F</th>
+                  <th class="bg-warning text-dark">G</th>
+                  <th class="bg-success text-white">E</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    <input
+                      type="text"
+                      class="form-control"
+                      [(ngModel)]="maneuverItem.name"
+                      name="maneuverName_{{ phase }}"
+                    />
+                  </td>
+                  <td>
+                    <textarea
+                      class="form-control"
+                      rows="3"
+                      [ngModel]="arrayToString(maneuverItem.cts.unsatisfactoryCriteria[phase])"
+                      (ngModelChange)="maneuverItem.cts.unsatisfactoryCriteria[phase] = stringToArray($event)"
+                      name="unsat_{{ phase }}"
+                    ></textarea>
+                  </td>
+                  <td>
+                    <textarea
+                      class="form-control"
+                      rows="3"
+                      [ngModel]="arrayToString(maneuverItem.cts.fairCriteria[phase])"
+                      (ngModelChange)="maneuverItem.cts.fairCriteria[phase] = stringToArray($event)"
+                      name="fair_{{ phase }}"
+                    ></textarea>
+                  </td>
+                  <td>
+                    <textarea
+                      class="form-control"
+                      rows="3"
+                      [ngModel]="arrayToString(maneuverItem.cts.goodCriteria[phase])"
+                      (ngModelChange)="maneuverItem.cts.goodCriteria[phase] = stringToArray($event)"
+                      name="good_{{ phase }}"
+                    ></textarea>
+                  </td>
+                  <td>
+                    <textarea
+                      class="form-control"
+                      rows="3"
+                      [ngModel]="arrayToString(maneuverItem.cts.excellentCriteria[phase])"
+                      (ngModelChange)="maneuverItem.cts.excellentCriteria[phase] = stringToArray($event)"
+                      name="excellent_{{ phase }}"
+                    ></textarea>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Close
+        </button>
+        <button type="button" class="btn btn-primary" (click)="onSave()">
+          Save changes
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

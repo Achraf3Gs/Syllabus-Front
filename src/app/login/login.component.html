@@ -1,0 +1,51 @@
+<div ngSkipHydration>
+  <div class="row ps-5 pe-5 pt-5">
+    <img src="/images/emblem1.png" class="emblem" />
+    <img src="/images/emblem.png" class="emblem" />
+  </div>
+  <div class="container my-container">
+    <div class="card justify-content-md-center">
+      <div class="card-header text-center">
+        <h2 class="text-center">Login</h2>
+
+        <!-- ✅ Show error message just below the heading -->
+        @if (errorMessages) {
+        <div class="alert alert-danger mt-3" role="alert">
+          {{ errorMessages }}
+        </div>
+        }
+      </div>
+
+      <div class="card-body">
+        <div class="form-floating mb-3">
+          <input
+            type="email"
+            class="form-control"
+            placeholder="name@example.com"
+            name="email"
+            [(ngModel)]="userLogin.email"
+          />
+          <label for="floatingInput">E-mail </label>
+        </div>
+        <div class="form-floating">
+          <input
+            type="password"
+            class="form-control"
+            id="floatingPassword"
+            placeholder="Password"
+            name="password"
+            [(ngModel)]="userLogin.password"
+          />
+          <label for="floatingPassword">Password</label>
+        </div>
+        <div class="form-floating button">
+          <a [routerLink]="['/register']" class="btn btn-link">Register</a>
+          <button type="button" class="btn btn-primary" (click)="onlogin()">
+            <i class="fa-solid fa-right-to-bracket" ngSkipHydration></i>
+            &nbsp;Login
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

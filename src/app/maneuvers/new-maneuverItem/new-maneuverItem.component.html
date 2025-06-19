@@ -1,0 +1,143 @@
+<div class="col ms-3 mb-3">
+  <!-- Image Section -->
+  <div class="col-md-12 mb-3 mt-3 ">
+    <img
+      src="/images/MANEUVER.jpg"
+      class="rounded-circle"
+      width="200px"
+      height="200px"
+    />
+  </div>
+
+  <!-- Header -->
+  <div class="col-md-12 ms-3 pe-4">
+    <hr />
+    <div class="col-md-8 mb-3">
+      <h2>
+        <fa-icon [icon]="faInfo" class="me-2 blue-color">&nbsp;</fa-icon>
+        Maneuver Information
+      </h2>
+    </div>
+
+    <!-- Form -->
+    <div class="col-md-12">
+      <!-- Name + Group in one row -->
+      <div class="row mb-3 pe-5">
+        <!-- Maneuver Name Input -->
+        <div class="col-md-4">
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Maneuver name"
+            aria-label="Maneuver name"
+            [(ngModel)]="maneuverItem.name"
+            name="maneuverName"
+          />
+        </div>
+
+        <!-- Maneuver Group Dropdown -->
+        <div class="col-md-4">
+          <select
+          class="form-select"
+          id="flightDomain"
+          [(ngModel)]="maneuverItem.flightDomain"
+          name="flightDomain"
+        >
+          <option [ngValue]="null" disabled selected>
+            Select Flight Domain
+          </option>
+          <option
+            *ngFor="let fd of flightDomains"
+            [ngValue]="fd"
+          >
+            {{ fd.name }}
+          </option>
+        </select>
+
+        </div>
+      </div>
+
+      <!-- CTS Tables for Each Phase -->
+      <div class="col-md-12 mt-4">
+        <h4>Course Training Standards (CTS) by Phase:</h4>
+
+        <div *ngFor="let phase of phases; let i = index" class="mb-4 p-3 border rounded">
+          <h5 class="mb-3 text-primary">{{ phase.phaseName }}</h5>
+
+          <div style="width: 100%; overflow-x: auto">
+            <table class="table table-bordered text-center full-width-table w-100">
+              <thead>
+                <tr>
+                  <th class="bg-danger text-white">U<br /><small>(Level 2)</small></th>
+                  <th class="bg-warning text-dark">F<br /><small>(Level 3)</small></th>
+                  <th class="bg-warning text-dark">G<br /><small>(Level 4)</small></th>
+                  <th class="bg-success text-white">E<br /><small>(Level 5)</small></th>
+                  <th class="bg-secondary text-white">NG<br /><small>(No Grade)</small></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    <textarea
+                      class="form-control"
+                      rows="3"
+                      placeholder="U Descriptions (one per line)"
+                      [(ngModel)]="maneuverItem.cts.unsatisfactoryCriteria[phase.phaseName]"
+                      [name]="'unsatisfactory_' + i"
+                    ></textarea>
+                  </td>
+                  <td>
+                    <textarea
+                      class="form-control"
+                      rows="3"
+                      placeholder="F Descriptions (one per line)"
+                      [(ngModel)]="maneuverItem.cts.fairCriteria[phase.phaseName]"
+                      [name]="'fair_' + i"
+                    ></textarea>
+                  </td>
+                  <td>
+                    <textarea
+                      class="form-control"
+                      rows="3"
+                      placeholder="G Descriptions (one per line)"
+                      [(ngModel)]="maneuverItem.cts.goodCriteria[phase.phaseName]"
+                      [name]="'good_' + i"
+                    ></textarea>
+                  </td>
+                  <td>
+                    <textarea
+                      class="form-control"
+                      rows="3"
+                      placeholder="E Descriptions (one per line)"
+                      [(ngModel)]="maneuverItem.cts.excellentCriteria[phase.phaseName]"
+                      [name]="'excellent_' + i"
+                    ></textarea>
+                  </td>
+                  <td>
+                    <textarea
+                      class="form-control"
+                      rows="3"
+                      placeholder="NG Descriptions (one per line)"
+                      [(ngModel)]="maneuverItem.cts.noGradeCriteria[phase.phaseName]"
+                      [name]="'nograde_' + i"
+                    ></textarea>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Buttons -->
+      <div class="col-md-12 text-end mt-3">
+        <button type="button" class="btn btn-danger me-2">
+          <fa-icon [icon]="faBan" class="me-2"></fa-icon>Cancel
+        </button>
+        <button type="button" class="btn btn-primary" (click)="onSave()">
+          <fa-icon [icon]="faFloppyDisk" class="me-2"></fa-icon>Save
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

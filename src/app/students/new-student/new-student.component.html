@@ -1,0 +1,82 @@
+<div class="col ms-3 mb-3">
+  <div class="col-md-12 mb-3">
+    <img
+      src="/images/student1.png"
+      class="rounded-circle"
+      width="200px"
+      heigh="200px"
+    />
+  </div>
+  <div class="col-md-8 ms-3">
+    <hr />
+    <div class="col-md-8 mb-3">
+      <h2>
+        <fa-icon [icon]="faInfo" class="me-2 blue-color">&nbsp;</fa-icon>
+        Student Information
+      </h2>
+      <!-- Add this somewhere in your template (e.g., above the form) -->
+      <div *ngIf="errorMessage" class="alert alert-danger" role="alert">
+        {{ errorMessage }}
+      </div>
+    </div>
+    <div class="col-md-8">
+      <div class="row mb-3 pe-5">
+        <div class="col">
+          <input
+            type="text"
+            class="form-control"
+            placeholder="First name"
+            aria-label="First name"
+            [(ngModel)]="student.firstName"
+          />
+        </div>
+        <div class="col">
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Last name"
+            aria-label="Last name"
+            [(ngModel)]="student.lastName"
+          />
+        </div>
+      </div>
+      <div class="row mb-3 pe-5">
+        <div class="col">
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Grade"
+            aria-label="Grade"
+            [(ngModel)]="student.grade"
+          />
+        </div>
+        <div class="col">
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Call Sign"
+            aria-label="Call Sign"
+            [(ngModel)]="student.callSign"
+          />
+        </div>
+        <div class="col">
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Instrctor-Call Sign"
+            aria-label="Instrctor-Call Sign"
+            [(ngModel)]="student.instructor.callSign"
+          />
+        </div>
+      </div>
+    </div>
+    <div class="col-md-12 text-end mt-3">
+      <button type="button" class="btn btn-danger me-2">
+        <fa-icon [icon]="faBan" class="me-2"></fa-icon>Cancel
+      </button>
+      <button type="button" class="btn btn-primary" (click)="onSave()">
+        <fa-icon [icon]="faFloppyDisk" class="me-2"></fa-icon>Save
+      </button>
+    </div>
+  </div>
+</div>

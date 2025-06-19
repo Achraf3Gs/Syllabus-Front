@@ -1,0 +1,39 @@
+<div class="col ms-3 mb-3">
+
+  <div class="col-md-8 ms-3">
+    <hr />
+    <div class="col-md-8 mb-3">
+      <h2>
+        <fa-icon [icon]="faInfo" class="me-2 blue-color">&nbsp;</fa-icon>
+        FlightDomain Information
+      </h2>
+      <!-- Add this somewhere in your template (e.g., above the form) -->
+      <div *ngIf="errorMessage" class="alert alert-danger" role="alert">
+        {{ errorMessage }}
+      </div>
+    </div>
+    <div class="col-md-8">
+
+      <div class="row mb-3 pe-5">
+        <div class="col">
+          <input
+            type="text"
+            class="form-control"
+            placeholder="flightDomainName"
+            aria-label="flightDomainName"
+            [(ngModel)]="newflightDomain.name"
+          />
+        </div>
+
+      </div>
+    </div>
+    <div class="col-md-12 text-end mt-3">
+      <button type="button" class="btn btn-danger me-2">
+        <fa-icon [icon]="faBan" class="me-2"></fa-icon>Cancel
+      </button>
+      <button type="button" class="btn btn-primary" (click)="onSave()">
+        <fa-icon [icon]="faFloppyDisk" class="me-2"></fa-icon>Save
+      </button>
+    </div>
+  </div>
+</div>

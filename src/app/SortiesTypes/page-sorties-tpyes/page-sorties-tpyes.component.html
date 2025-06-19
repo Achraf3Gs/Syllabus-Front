@@ -1,0 +1,33 @@
+<div class="col">
+  <!-- Header Row -->
+  <div class="row m-3">
+    <div class="col-md-8 p-0">
+      <h1>Liste of SortiesTypes</h1>
+    </div>
+    <div class="col-md-4 text-end">
+       <div class="col-md-12">
+    <button type="button" class="btn btn-primary" (click)="goToNewSortiesType()">
+      +Add SortiesType
+    </button>
+  </div>
+    </div>
+  </div>
+
+ <!-- Instructor Details List -->
+<div class="row m-3">
+  <div class="col">
+    <app-sorties-types-details
+      *ngFor="let sortiesType of sortiesTypes"
+      [sortiesType]="sortiesType"
+    ></app-sorties-types-details>
+  </div>
+</div>
+
+
+  <!-- Pagination Row -->
+  <div class="row mb-4">
+    <div class="col-md-12 d-flex justify-content-center align-items-center">
+      <app-pagination></app-pagination>
+    </div>
+  </div>
+</div>

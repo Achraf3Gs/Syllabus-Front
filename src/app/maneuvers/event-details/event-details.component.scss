@@ -1,0 +1,22 @@
+.custom-modal-width {
+  max-width: 90% !important; /* or any size you want, e.g., 900px */
+  width: 900px !important;
+}
+
+.full-width-table {
+  width: 100%;
+  min-width: 1200px; /* or higher to spread columns */
+  table-layout: fixed; /* ensures equal column widths */
+}
+.full-width-table th,
+.full-width-table td {
+  word-wrap: break-word;
+}
+
+
+.modal-extra-wide {
+  max-width: 90vw;
+  width: 90vw;
+  max-height: 85vh; /* Adjust as needed */
+  height: 85vh;
+}

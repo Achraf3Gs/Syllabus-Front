@@ -1,0 +1,26 @@
+<div class="main-container">
+  <div class="row min-height-600 no-flex-wrap">
+    <div class="card col-md-2 me-2">
+      <div class="col">
+        <div class="text-center mt-3 mb-3">
+          <h4>14<sup>th</sup> Air Unit</h4>
+          <img src="/images/emblem.jpg" />
+        </div>
+        <div>
+          <app-menu> </app-menu>
+        </div>
+      </div>
+    </div>
+    <div class="card col-md-10 background-grey border-none">
+      <div class="col ps-0 pe-0 d-flex flex-column justify-content-between">
+        <div class="card p-4 min-height-100 mb-2">
+          <app-header> </app-header>
+        </div>
+        <div class="card mb-2" style="min-height: 480px">
+          <router-outlet > </router-outlet>
+        </div>
+        <div class="card min-height-100">footer</div>
+      </div>
+    </div>
+  </div>
+</div>

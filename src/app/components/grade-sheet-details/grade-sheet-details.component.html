@@ -1,0 +1,64 @@
+<div class="row mb-1 me-0 custom-border p-0">
+  <!-- Date Section -->
+  <div class="col-md-2 d-flex align-items-center justify-content-center border-right">
+    <div class="text-center w-100">
+      <div class="d-flex align-items-center mb-2">
+        <fa-icon [icon]="faCalendarDays" class="me-2 blue-color"></fa-icon>
+        <span>12.12.2025</span>
+      </div>
+    </div>
+  </div>
+  <!-- Air Crew -->
+  <div class="col-md-2 d-flex align-items-center justify-content-center border-right">
+    <div class="text-center w-100">
+      <div class="d-flex align-items-center mb-2">
+        <fa-icon [icon]="faUsers" class="me-2 blue-color"></fa-icon>
+        <span>25A+55</span>
+      </div>
+    </div>
+  </div>
+  <!-- SortieType & Nbr -->
+  <div class="col-md-2 d-flex align-items-center justify-content-center border-right">
+    <div class="text-center w-100">
+      <div class="d-flex align-items-center mb-2">
+        <fa-icon [icon]="faPlaneDeparture" class="me-2 blue-color"></fa-icon>
+        <span>SortieType & Nbr</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- GradeSheet details-->
+  <div
+    class="col-md-4 d-flex align-items-center justify-content-center border-right"
+  >
+    <div class="text-center">
+      <div class="d-flex align-items-center mb-2">
+         <button type="button" class="btn btn-link p-0 w-100" (click)="goToSyllabusDetails()">
+            <fa-icon [icon]="faSheetPlastic" class="me-2 blue-color"></fa-icon>
+            GradeSheet details
+          </button>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Action Buttons -->
+  <div class="col-md-2 d-flex align-items-center justify-content-center">
+    <div class="w-100 text-center">
+      <div class="row">
+        <div class="col-6">
+          <button type="button" class="btn btn-link p-0 w-100">
+            <fa-icon [icon]="faPen"></fa-icon><br />
+            Modify
+          </button>
+        </div>
+        <div class="col-6">
+          <button type="button" class="btn btn-link p-0 w-100">
+            <fa-icon [icon]="faEraser"></fa-icon><br />
+            Delete
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

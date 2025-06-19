@@ -1,0 +1,73 @@
+<div class="col ms-3 mb-3">
+  <div class="col-md-12 mb-3">
+    <img
+      src="/images/img.png"
+      class="rounded-circle"
+      width="200px"
+      heigh="200px"
+    />
+  </div>
+  <div class="col-md-8 ms-3">
+    <hr />
+    <div class="col-md-8 mb-3">
+      <h2>
+        <fa-icon [icon]="faInfo" class="me-2 blue-color">&nbsp;</fa-icon>
+        User Information
+      </h2>
+    </div>
+    <div class="col-md-8">
+      <div class="row mb-3 pe-5">
+        <div class="col">
+          <input
+            type="text"
+            class="form-control"
+            placeholder="First name"
+            aria-label="First name"
+          />
+        </div>
+        <div class="col">
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Last name"
+            aria-label="Last name"
+          />
+        </div>
+      </div>
+      <div class="row mb-3 pe-5">
+        <div class="col">
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Grade"
+            aria-label="Grade"
+          />
+        </div>
+        <div class="col">
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Function"
+            aria-label="Function"
+          />
+        </div>
+        <div class="col">
+          <select class="form-select" aria-label="Default select example">
+            <option selected>Role</option>
+            <option value="1">User</option>
+            <option value="2">Admin</option>
+            <option value="3">Super-Admin</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-12 text-end mt-3">
+      <button type="button" class="btn btn-danger me-2">
+        <fa-icon [icon]="faBan" class="me-2"></fa-icon>Cancel
+      </button>
+      <button type="button" class="btn btn-primary">
+        <fa-icon [icon]="faFloppyDisk" class="me-2"></fa-icon>Save
+      </button>
+    </div>
+  </div>
+</div>

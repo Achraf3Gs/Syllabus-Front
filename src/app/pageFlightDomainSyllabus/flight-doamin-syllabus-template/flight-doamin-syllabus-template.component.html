@@ -1,0 +1,44 @@
+<div class="syllabus-wrapper">
+  <h2 class="syllabus-title text-center mt-3">Student 25A's Syllabus</h2>
+  <div class="syllabus-table p-5">
+    <table>
+      <thead>
+        <tr>
+          <th rowspan="3">Maneuvers</th>
+          <th colspan="4" class="basic-header">Basic</th>
+          <th colspan="4" class="advanced-header">Advanced</th>
+          <th rowspan="3" class="mif">MIF</th>
+        </tr>
+        <tr>
+          <ng-container *ngFor="let column of missionColumns">
+            <th class="date">{{ column.date }}</th>
+          </ng-container>
+        </tr>
+        <tr>
+          <ng-container *ngFor="let column of missionColumns">
+            <th class="grade">{{ column.overallGrade }}</th>
+          </ng-container>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let maneuver of maneuvers">
+        <td class="maneuver">{{ maneuver.name }}</td>
+        <td
+          *ngFor="let grade of maneuver.grades; let i = index"
+          [ngClass]="{
+            'below-mif': getGradeLevel(grade) < extractMifLevel(maneuver.mif),
+            'meets-mif': getGradeLevel(grade) >= extractMifLevel(maneuver.mif)
+          }"
+        >
+          {{ grade }}
+        </td>
+        <td class="mif-cell">{{ maneuver.mif }}</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+  </div>
+
+
+

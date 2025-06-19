@@ -1,0 +1,31 @@
+<div class="col">
+  <!-- Header Row -->
+  <div class="row m-3">
+    <div class="col-md-8 p-0">
+      <h1>Liste of Users</h1>
+    </div>
+    <div class="col-md-4 text-end">
+      <div class="col-md-12">
+        <button type="button" class="btn btn-primary" (click)="goToNewUser()">
+          +Add User
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Student Details List -->
+  <div class="row m-3">
+    <div class="col">
+      <app-user-details></app-user-details>
+      <app-user-details></app-user-details>
+      <app-user-details></app-user-details>
+    </div>
+  </div>
+
+  <!-- Pagination Row -->
+  <div class="row mb-4">
+    <div class="col-md-12 d-flex justify-content-center align-items-center">
+      <app-pagination></app-pagination>
+    </div>
+  </div>
+</div>

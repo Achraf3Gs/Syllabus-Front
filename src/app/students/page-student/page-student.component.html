@@ -1,0 +1,29 @@
+<div class="col">
+  <!-- Header Row -->
+  <div class="row m-3">
+    <div class="col-md-8 p-0">
+      <h1>Liste of Students</h1>
+    </div>
+    <div class="col-md-4 text-end">
+      <button type="button" class="btn btn-primary" (click)="goToNewStudent()">
+        +Add Student
+      </button>
+    </div>
+  </div>
+
+  <div class="row m-3">
+    <div class="col">
+      <app-student-details
+        *ngFor="let student of students"
+        [student]="student"
+      ></app-student-details>
+    </div>
+  </div>
+
+  <!-- Pagination Row -->
+  <div class="row mb-4">
+    <div class="col-md-12 d-flex justify-content-center align-items-center">
+      <app-pagination></app-pagination>
+    </div>
+  </div>
+</div>

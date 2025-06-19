@@ -1,0 +1,92 @@
+<div class="row ps-5 pe-5 pt-5">
+  <img src="/images/emblem1.png" class="emblem" />
+  <img src="/images/emblem.png" class="emblem" />
+</div>
+
+<div class="container my-container">
+  <div class="card justify-content-md-center">
+    <div class="card-header text-center">
+      <h2>Register</h2>
+       <!-- ✅ Show error message just below the heading -->
+       @if (errorMessages) {
+        <div class="alert alert-danger mt-3" role="alert">
+          {{ errorMessages }}
+        </div>
+        }
+    </div>
+    <div class="card-body">
+      <div class="form-floating mb-3">
+        <input
+          type="text"
+          class="form-control"
+          placeholder="First Name"
+          [(ngModel)]="userRegister.firstName"
+        />
+        <label for="floatingInput">First Name </label>
+      </div>
+      <div class="form-floating mb-3">
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Last Name"
+          [(ngModel)]="userRegister.lastName"
+        />
+        <label for="floatingInput">Last Name </label>
+      </div>
+      <div class="form-floating mb-3">
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Grade"
+          [(ngModel)]="userRegister.grade"
+        />
+        <label for="floatingInput">Grade </label>
+      </div>
+      <div class="form-floating mb-3">
+        <input
+          type="text"
+          class="form-control"
+          placeholder="function"
+          [(ngModel)]="userRegister.function"
+        />
+        <label for="floatingInput">function </label>
+      </div>
+
+      <div class="form-floating mb-3">
+        <input
+          type="email"
+          class="form-control"
+          placeholder="name@example.com"
+          [(ngModel)]="userRegister.email"
+        />
+        <label for="floatingInput">E-mail </label>
+      </div>
+
+      <div class="form-floating mb-3">
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Password"
+          [(ngModel)]="userRegister.password"
+        />
+        <label for="floatingInput">Password </label>
+      </div>
+      <div class="form-floating mb-3">
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Confirm Password"
+          [(ngModel)]="userRegister.confirmPassword"
+        />
+        <label for="floatingInput">Confirm Password </label>
+      </div>
+
+      <div class="form-floating button">
+        <a [routerLink]="['/login']" class="btn btn-link">Login</a>
+        <button type="button" class="btn btn-primary" (click)="onRegister()">
+          <i class="fa-solid fa-check"></i> &nbsp;Register
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

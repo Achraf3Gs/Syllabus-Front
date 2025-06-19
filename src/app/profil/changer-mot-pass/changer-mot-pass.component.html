@@ -1,0 +1,48 @@
+<div class="row m-3">
+  <!-- LEFT CARD (wider with col-md-4) -->
+  <div class="card col-md-4 text-center me-2">
+    <div class="mb-3 mt-3">
+      <img
+        src="/images/user.png"
+        class="rounded-circle"
+        width="180px"
+        height="180px"
+      />
+    </div>
+    <div class="mb-3">
+      <h4>FirstName & LastName</h4>
+      <small class="form-text text-muted">Grade, Job</small>
+    </div>
+  </div>
+
+  <!-- RIGHT CARD (remaining width) -->
+  <div class="card col-md-7 mt-3">
+    <form class="mt-3">
+      <div class="mb-3">
+        <input type="text" class="form-control" placeholder="Old Password" />
+      </div>
+      <div class="mb-3">
+        <input type="text" class="form-control" placeholder="New Password" />
+      </div>
+      <div class="mb-3">
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Confirm Password"
+        />
+      </div>
+    </form>
+    <div class="col text-right m-3">
+  <div class="col md-12 text-end">
+    <button type="button" class="btn btn-danger me-2">
+      <fa-icon [icon]="faBan" class="me-2 white-color"></fa-icon> &nbsp;Canceld
+    </button>
+    <button type="button" class="btn btn-primary">
+      <fa-icon [icon]="faSave" class="me-2 white-color"></fa-icon>&nbsp;Save
+      Password
+    </button>
+  </div>
+</div>
+  </div>
+</div>
+

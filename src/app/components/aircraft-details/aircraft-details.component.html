@@ -1,0 +1,73 @@
+<div class="row mb-1 me-0 custom-border p-0">
+  <!-- Image Section -->
+  <div class="col-md-1 d-flex align-items-center justify-content-center border-right">
+    <div class="p-1 text-center">
+      <img
+        src="/images/T6.jpg"
+        alt="Photo"
+        class="img-fluid"
+        width="100px"
+        height="100px"
+      />
+    </div>
+  </div>
+
+  <!-- Registration with Icon -->
+  <div class="col-md-3 d-flex justify-content-center align-items-center border-right text-center">
+    <div class="d-flex align-items-center text-center">
+      <fa-icon [icon]="faRocket" class="me-2 blue-color"></fa-icon>
+      <span>{{ aircraft?.registration }}</span>
+    </div>
+  </div>
+
+ <!-- Availability Section -->
+<div
+class="col-md-2 d-flex justify-content-center align-items-center border-right text-center"
+[ngClass]="aircraft?.availability ? 'available-bg' : 'unavailable-bg'"
+>
+<div class="d-flex align-items-center text-center text-white">
+  <p *ngIf="aircraft?.availability; else notAvailable">Available</p>
+  <ng-template #notAvailable><p>Not Available</p></ng-template>
+</div>
+</div>
+
+<!-- Causes Section -->
+<div
+  class="col-md-3 d-flex justify-content-center align-items-center border-right text-center"
+  [ngClass]="aircraft?.availability ? 'available-bg' : 'unavailable-bg'"
+>
+  <div class="d-flex align-items-center text-center text-white">
+    <p>
+      {{ aircraft?.availability ? 'No remarks' : aircraft?.causes }}
+    </p>
+  </div>
+</div>
+
+
+
+  <!-- Action Buttons -->
+  <div class="col-md-3 d-flex align-items-center justify-content-center">
+    <div class="w-100 text-center">
+      <div class="row">
+        <div class="col-4">
+          <button type="button" class="btn btn-link p-0 w-100">
+            <fa-icon [icon]="faPen"></fa-icon><br />
+            Modify
+          </button>
+        </div>
+        <div class="col-4">
+          <button type="button" class="btn btn-link p-0 w-100">
+            <fa-icon [icon]="faTrash"></fa-icon><br />
+            Delete
+          </button>
+        </div>
+        <div class="col-4">
+          <button type="button" class="btn btn-link p-0 w-100">
+            <fa-icon [icon]="faCircleInfo"></fa-icon><br />
+            Details
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,80 @@
+<div class="col ms-3 mb-3">
+  <div class="col-md-8 ms-3">
+    <hr />
+    <div class="col-md-8 mb-8">
+      <h2>
+        <fa-icon [icon]="faInfo" class="me-2 blue-color">&nbsp;</fa-icon>
+        Flight-Doamin-Syllabus Information
+      </h2>
+
+      <!-- Error Message -->
+      <div *ngIf="errorMessage" class="alert alert-danger" role="alert">
+        {{ errorMessage }}
+      </div>
+    </div>
+
+    <!-- Add mt-5 here to increase top margin -->
+    <div class="row mt-5">
+      <!-- First Column -->
+      <div class="col-md-6">
+        <div class="row mb-3 pe-5">
+          <div class="col">
+            <h5 class="mb-2">Flight Domain' Name</h5>
+            <!-- Title added here -->
+            <input
+              type="text"
+              class="form-control"
+              placeholder=" Name"
+              aria-label="FlightDoaminSyllabusName"
+              [(ngModel)]="newFlightDoaminSyllabus.name"
+            />
+          </div>
+        </div>
+      </div>
+
+      <!-- Second Column -->
+      <!-- Second Column -->
+      <!-- Second Column -->
+      <div class="col-md-4">
+        <div class="row mb-3 pe-5">
+          <div class="col">
+            <h5 class="mb-2">Block's Number</h5>
+            <input
+              type="text"
+              class="form-control"
+              placeholder="BlockNumber"
+              aria-label="BlockNumber"
+              [(ngModel)]="newFlightDoaminSyllabus.block"
+            />
+          </div>
+        </div>
+      </div>
+
+      <!-- Maneuver Group Dropdown -->
+      <div class="col-md-4">
+        <h5 class="mb-2">Select Syllabus Type</h5>
+        <select
+          class="form-select"
+          id="syllabus"
+          [(ngModel)]="newFlightDoaminSyllabus.syllabus"
+          name="syllabus"
+        >
+          <option [ngValue]="null" disabled selected>Select Syllabus</option>
+          <option *ngFor="let sb of syllabuss" [ngValue]="sb">
+            {{ sb.title }}
+          </option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Button Row -->
+    <div class="col-md-12 text-end mt-3">
+      <button type="button" class="btn btn-danger me-2">
+        <fa-icon [icon]="faBan" class="me-2"></fa-icon>Cancel
+      </button>
+      <button type="button" class="btn btn-primary" (click)="onSave()">
+        <fa-icon [icon]="faFloppyDisk" class="me-2"></fa-icon>Save
+      </button>
+    </div>
+  </div>
+</div>

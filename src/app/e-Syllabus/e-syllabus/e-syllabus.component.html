@@ -1,0 +1,99 @@
+<div class="col">
+  <!-- Header Row -->
+  <div class="row m-3">
+    <div class="col-md-8 p-0">
+      <h1>Liste of Syllabus</h1>
+    </div>
+    <div class="col-md-4 text-end">
+      <app-esyllabus-button> </app-esyllabus-button>
+    </div>
+  </div>
+
+  <!-- E-Syllabus Details List -->
+  <div class="row m-3">
+    <div class="accordion" id="accordionExample">
+      <div class="accordion-item mb-2">
+        <!-- First Row: E-Syllabus Details -->
+        <div class="row p-3">
+          <app-e-syllabus-details></app-e-syllabus-details>
+        </div>
+
+        <!-- Second Row: Accordion Header -->
+        <h2 class="accordion-header">
+          <button
+            class="accordion-button collapsed"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#collapseTwo"
+            aria-expanded="false"
+            aria-controls="collapseTwo"
+          >
+            View Details
+          </button>
+        </h2>
+
+        <!-- Collapsible Content -->
+        <div
+          id="collapseTwo"
+          class="accordion-collapse collapse"
+          data-bs-parent="#accordionExample"
+          style="max-height: 300px; overflow-y: scroll"
+        >
+          <div class="accordion-body">
+            <app-grade-sheet-details></app-grade-sheet-details>
+            <app-grade-sheet-details></app-grade-sheet-details>
+            <app-grade-sheet-details></app-grade-sheet-details>
+            <app-grade-sheet-details></app-grade-sheet-details>
+            <app-grade-sheet-details></app-grade-sheet-details>
+            <!-- Repeat as needed -->
+          </div>
+        </div>
+      </div>
+
+      <div class="accordion-item mb-2">
+        <!-- First Row: E-Syllabus Details -->
+        <div class="row p-3">
+          <app-e-syllabus-details></app-e-syllabus-details>
+        </div>
+
+        <!-- Second Row: Accordion Header -->
+        <h2 class="accordion-header">
+          <button
+            class="accordion-button collapsed"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#collapseThree"
+            aria-expanded="false"
+            aria-controls="collapseThree"
+          >
+            View Details
+          </button>
+        </h2>
+
+        <!-- Collapsible Content -->
+        <div
+          id="collapseThree"
+          class="accordion-collapse collapse"
+          data-bs-parent="#accordionExample"
+          style="max-height: 300px; overflow-y: scroll"
+        >
+          <div class="accordion-body">
+            <app-grade-sheet-details></app-grade-sheet-details>
+            <app-grade-sheet-details></app-grade-sheet-details>
+            <app-grade-sheet-details></app-grade-sheet-details>
+            <app-grade-sheet-details></app-grade-sheet-details>
+            <app-grade-sheet-details></app-grade-sheet-details>
+            <!-- Repeat as needed -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pagination Row -->
+  <div class="row mb-4">
+    <div class="col-md-12 d-flex justify-content-center align-items-center">
+      <app-pagination></app-pagination>
+    </div>
+  </div>
+</div>

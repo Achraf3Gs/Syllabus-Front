@@ -1,0 +1,54 @@
+<div class="row m-3">
+  <!-- LEFT CARD (wider with col-md-4) -->
+  <div class="card col-md-4 text-center me-2">
+    <div class="mb-3 mt-3">
+      <img
+        src="/images/user.png"
+        class="rounded-circle"
+        width="180px"
+        height="180px"
+      />
+    </div>
+    <div class="mb-3">
+      <h4>FirstName & LastName</h4>
+      <small class="form-text text-muted">Grade, Job</small>
+    </div>
+    <div class="mb-3">
+      <button type="button" class="btn btn-primary me-2">
+        <fa-icon [icon]="faPen" class="me-2 white-color"></fa-icon> &nbsp;Modify
+      </button>
+      <button type="button" class="btn btn-warning" (click)="modifyPassword()">
+        <fa-icon [icon]="faLock" class="me-2 white-color"></fa-icon>&nbsp;Change
+        Password
+      </button>
+    </div>
+  </div>
+
+  <!-- RIGHT CARD (remaining width) -->
+  <div class="card col-md-7 p-3">
+    <table class="table">
+      <tbody>
+        <tr>
+          <th scope="row">FirstName & LastName</th>
+          <td>FirstName & LastName</td>
+        </tr>
+        <tr>
+          <th scope="row">Grade</th>
+          <td>Grade</td>
+        </tr>
+        <tr>
+          <th scope="row">Job</th>
+          <td>Job</td>
+        </tr>
+        <tr>
+          <th scope="row">Email</th>
+          <td>Email</td>
+        </tr>
+        <tr>
+          <th scope="row">Mobile</th>
+          <td>Mobile</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
