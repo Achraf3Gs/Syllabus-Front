@@ -5,7 +5,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faInfo, faBan, faFloppyDisk } from '@fortawesome/free-solid-svg-icons';
 import { ManeuverItem } from '../../model/maneuverItem';
 import { HttpClient } from '@angular/common/http';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { ManeuverItemService } from '../../services/maneuver-item.service';
 import { FlightDomainService } from '../../services/flightDomain.service';
 import { FormsModule, NgModel } from '@angular/forms';
@@ -16,7 +16,7 @@ import { Phase } from '../../model/Phase';
 @Component({
   selector: 'app-new-maneuver-Item',
   standalone: true,
-  imports: [FontAwesomeModule, NgFor, FormsModule, CommonModule],
+  imports: [FontAwesomeModule, NgFor, FormsModule, CommonModule, RouterModule],
   templateUrl: './new-maneuverItem.component.html',
   styleUrl: './new-maneuverItem.component.scss',
 })

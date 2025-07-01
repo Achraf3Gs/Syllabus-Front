@@ -39,7 +39,7 @@ export class GardeSheetService {
     flightDomainSyllabusId: number,
     gradeSheetId: number
   ): Observable<any> {
-    return this.http.post(
+    return this.http.put(
       `${this.urlGradeSheet}/update/${flightDomainSyllabusId}/${gradeSheetId}`,
       myform
     );

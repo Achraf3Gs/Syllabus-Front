@@ -12,7 +12,7 @@ import { PhaseService } from '../../services/phase.service';
 import { GardeSheetService } from '../../services/garde-sheet.service';
 import { FlightDomainService } from '../../services/flightDomain.service';
 import { Router } from '@angular/router';
-import { faInfo, faBan, faFloppyDisk } from '@fortawesome/free-solid-svg-icons';
+import { faInfo, faBan, faFloppyDisk, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { FlightDomainSyllabusService } from '../../services/flight-domain-syllabus.service';
 import { SortiesType } from '../../model/SortiesType';
@@ -32,6 +32,7 @@ export class NewGradeSheetComponent {
   faInfo = faInfo;
   faBan = faBan;
   faFloppyDisk = faFloppyDisk;
+  faTrash = faTrash;
   // table of student
   students: any;
   instructors: any;
@@ -52,6 +53,7 @@ export class NewGradeSheetComponent {
   flightDomainSyllabusService = inject(FlightDomainSyllabusService);
 
   flightDomainSyllabus: any; // or typed
+  blocks: number[] = [];
 
   errorMessage: any;
   constructor(private router: Router) {
@@ -146,6 +148,15 @@ export class NewGradeSheetComponent {
     return count + itemIndex + 1;
   }
 
+  onFlightDomainSyllabusChange(selectedSyllabus: any): void {
+    this.blocks = [];
+    this.formData.block = '';
+    if (selectedSyllabus && selectedSyllabus.block) {
+      const numberOfBlocks = parseInt(selectedSyllabus.block, 10);
+      this.blocks = Array.from({ length: numberOfBlocks }, (_, i) => i + 1);
+    }
+  }
+
   selectedGroupId: number | null = null; // Add this at the top of your component
   selectedFlightDomain: any = null; // Optional: stores the full selected object
 
@@ -213,6 +224,12 @@ export class NewGradeSheetComponent {
   // Method to trigger the browser's print dialog
   printPage() {
     window.print();
+  }
+
+  removeManeuverItem(groupIndex: number, itemIndex: number): void {
+    if (this.selectedFlightDomains && this.selectedFlightDomains[groupIndex] && this.selectedFlightDomains[groupIndex].maneuverItems) {
+      this.selectedFlightDomains[groupIndex].maneuverItems.splice(itemIndex, 1);
+    }
   }
 
   // Updated saveGradesheet method to include MIF requirements
@@ -284,16 +301,15 @@ export class NewGradeSheetComponent {
     );
   }
 
-
   // Your main save method - UPDATED to include maneuver items collection
   onSave2(): void {
     const collected = this.collectManeuverItems(); // ✅ collect items first
 
     // ✅ Make sure flightDomainSyllabus is included
     this.formData['flightDomainSyllabus'] = this.flightDomainSyllabus;
-
+    this.formData.name = `${this.formData.sortieType}${this.formData.sortieNbr}`;
     this.newGradeSheet = this.formData;
-
+    console.log('this.newGradeSheet :', this.newGradeSheet);
     const name = this.newGradeSheet.flightDomainSyllabus?.name;
 
     if (!name) {
@@ -334,6 +350,4 @@ export class NewGradeSheetComponent {
         },
       });
   }
-
-
 }

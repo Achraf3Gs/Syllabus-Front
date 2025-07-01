@@ -16,6 +16,9 @@ import { faInfo, faBan, faFloppyDisk } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { FlightDomainSyllabusService } from '../../services/flight-domain-syllabus.service';
 import { SortiesType } from '../../model/SortiesType';
+import { ManeuverSubmissionItem } from '../../model/ManeuverSubmissionItem';
+import { ManeuverItem } from '../../model/maneuverItem';
+import { GradeSheetManeuverItemService } from '../../services/grade-sheet-maneuver-item.service';
 
 type Rating = 'E' | 'G' | 'F' | 'U' | 'NG';
 
@@ -34,24 +37,24 @@ export class StandardGradeSheetComponent {
   students: any;
   instructors: any;
   flightDomainSyllabus2: any;
-  newGradeSheet: any;
+
   aircrafts: Aircraft[] = [];
   phases: Phase[] = [];
   sortieType: SortiesType[] = [];
   flightDomains: any[] = [];
+
   flightDomainsSyllabus: any[] = [];
   hasSafetyRemark = false;
+  comments: String = '';
 
   instructor: Instructor | undefined;
   studentService = inject(StudentService);
   instructorService = inject(InsructorService);
   aircraftService = inject(AircraftService);
   phaseService = inject(PhaseService);
-  sortiesTypesService = inject(SortiesTypesService);
   gradeSheetService = inject(GardeSheetService);
   flightDomainService = inject(FlightDomainService);
-  flightDomainSyllabusService = inject(FlightDomainSyllabusService);
-
+  gradeSheetManeuverItemService = inject(GradeSheetManeuverItemService);
   flightDomainSyllabus: any; // or typed
 
   errorMessage: any;
@@ -59,7 +62,6 @@ export class StandardGradeSheetComponent {
     const nav = this.router.getCurrentNavigation();
     this.flightDomainSyllabus = nav?.extras?.state?.['flightDomainSyllabus'];
   }
-
   ngOnInit(): void {
     this.studentService.listStudents().subscribe((response) => {
       this.students = response;
@@ -76,20 +78,10 @@ export class StandardGradeSheetComponent {
       this.phases = response;
       console.log('listofPhases:', this.phases);
     });
-    this.sortiesTypesService.listSortiesType().subscribe((response) => {
-      this.sortieType = response;
-      console.log('listofSortieTypeS:', this.sortieType);
-    });
     this.flightDomainService.listFlightDomain().subscribe((response) => {
       this.flightDomains = response;
-      console.log('listofFlightDomains:', this.flightDomains);
+      console.log('listofIManeuvers:', this.flightDomains);
     });
-    this.flightDomainSyllabusService
-      .listFlightDoaminSyllabus()
-      .subscribe((response) => {
-        this.flightDomainsSyllabus = response;
-        console.log('listofFlightDomainSyllabus:', this.flightDomainsSyllabus);
-      });
   }
 
   isEmptyObject(obj: any): boolean {
@@ -106,24 +98,6 @@ export class StandardGradeSheetComponent {
     }
     return '-';
   }
-
-  // Form data model
-  formData = {
-    mixDur: '',
-    crewMember: '',
-    student: '',
-    aircraft: '',
-    date: '',
-    instructorName: '',
-    sortieType: '',
-    sortieNbr: '',
-    phase: '',
-    ///GrageSheet-Name///
-    name: '',
-    block: '',
-    flightDoamin: null,
-  };
-
   onCrewMemberChange(event: any) {
     const selectedCallSign = event.target.value;
 
@@ -177,7 +151,7 @@ export class StandardGradeSheetComponent {
   // Blue Section Data with Ratings
 
   ratingOptions = ['E', 'G', 'F', 'U', 'NG'];
-  selectedGroupId: number | null = null;
+
   selectedGroup: any = null;
   selectedFlightDomains: any[] = [];
 
@@ -196,15 +170,31 @@ export class StandardGradeSheetComponent {
     return count + itemIndex + 1;
   }
 
-  onGroupChange(groupId: number | null) {
+  selectedGroupId: number | null = null; // Add this at the top of your component
+  selectedFlightDomain: any = null; // Optional: stores the full selected object
+
+  onGroupChange(groupId: number | null): void {
     if (groupId === null) return;
 
-    console.log('selectedFlightDomains before:', this.selectedFlightDomains);
+    // Save selected ID
+    this.selectedGroupId = groupId;
+    this.formData.selectedGroupId = groupId; // ✅ store it in formData
+
+    // Find the selected group object
     this.selectedGroup = this.flightDomains.find((g) => g.id === +groupId);
+    this.selectedFlightDomain = this.selectedGroup;
+
+    console.log('Selected Flight Domain ID:', this.selectedGroupId);
+    console.log(
+      'Assigned to formData.selectedGroupId:',
+      this.formData.selectedGroupId
+    );
+    console.log('selectedFlightDomains before:', this.selectedFlightDomains);
 
     const alreadySelected = this.selectedFlightDomains.find(
       (g) => g.id === +groupId
     );
+
     if (!alreadySelected && this.selectedGroup) {
       // Initialize MIF requirement for each item when adding a new group
       const groupWithMif = { ...this.selectedGroup };
@@ -218,6 +208,7 @@ export class StandardGradeSheetComponent {
       }
       this.selectedFlightDomains.push(groupWithMif);
     }
+
     console.log('selectedFlightDomains after:', this.selectedFlightDomains);
   }
 
@@ -344,6 +335,7 @@ export class StandardGradeSheetComponent {
     console.log('=== END RATING CALCULATION ===');
   }
 
+  //  calculateOverallRating to handle Us (Safety Unsatisfactory)
   // Orange-section
   // Initialize formData2 with default values
   formData2 = {
@@ -392,8 +384,7 @@ export class StandardGradeSheetComponent {
     },
     // Other form fields...
   };
-
-  comments: String = '';
+  // Initialize formData with default values
 
   // Method to trigger the browser's print dialog
   printPage() {
@@ -402,38 +393,90 @@ export class StandardGradeSheetComponent {
 
   // Updated saveGradesheet method to include MIF requirements
 
+  // Form data model
+  // In your component class
+
+  // Form data structure
+  formData: {
+    name: string;
+    block: string;
+    sortieType: string;
+    sortieNbr: number;
+    phase: string;
+    mixDur: string;
+    crewMember: string;
+    student: string;
+    aircraft: string;
+    date: string;
+    selectedGroupId: number;
+    instructorName: string;
+    maneuverItems: ManeuverSubmissionItem[];
+    flightDomainSyllabus: any; // 👈 or use a proper type if you have it (e.g., `FlightDomainSyllabus`)
+  } = {
+    name: '',
+    block: '',
+    sortieType: '',
+    sortieNbr: 0,
+    phase: '',
+    mixDur: '',
+    crewMember: '',
+    student: '',
+    aircraft: '',
+    date: '',
+    selectedGroupId: 0,
+    instructorName: '',
+    maneuverItems: [],
+    flightDomainSyllabus: undefined, // ✅ initialized
+  };
+
+  // Properties for your existing save method
+  newGradeSheet: any;
+
+  collectManeuverItems(): ManeuverSubmissionItem[] {
+    const maneuverItems: ManeuverSubmissionItem[] = [];
+
+    this.selectedFlightDomains.forEach((group) => {
+      group.maneuverItems.forEach((item: ManeuverItem) => {
+        if (item.mifRequirement && item.mifRequirement.trim() !== '') {
+          maneuverItems.push({
+            id: item.id,
+            mifRequirement: item.mifRequirement,
+          });
+        }
+      });
+    });
+
+    this.formData.maneuverItems = maneuverItems;
+
+    return maneuverItems;
+  }
+
+  // Method to get only items with MIF requirements (for submission)
+  getItemsWithMifRequirements() {
+    this.collectManeuverItems();
+
+    return this.formData.maneuverItems.filter(
+      (item) => item.mifRequirement && item.mifRequirement !== ''
+    );
+  }
+
+  // Your main save method - UPDATED to include maneuver items collection
   onSave2(): void {
+    const collected = this.collectManeuverItems(); // ✅ collect items first
+
+    // ✅ Make sure flightDomainSyllabus is included
+    this.formData['flightDomainSyllabus'] = this.flightDomainSyllabus;
+
     this.newGradeSheet = this.formData;
-    console.log('this.newGradeSheet :', this.newGradeSheet);
-    const name = this.newGradeSheet.flightDoaminSyllabus?.name;
+
+    const name = this.newGradeSheet.flightDomainSyllabus?.name;
 
     if (!name) {
       this.errorMessage = 'FlightDoaminSyllabus name is missing.';
       return;
     }
 
-    this.flightDomainSyllabusService
-      .getFlightDomainSyllabusName(name)
-      .subscribe({
-        next: (response) => {
-          this.flightDomainSyllabus2 = response;
-          this.gradeSheetService
-            .createRowGradeSheet(
-              this.newGradeSheet,
-              this.flightDomainSyllabus2.id
-            )
-            .subscribe({
-              next: () =>
-                this.router.navigate(['dashboard/flightDomainSyllabus']),
-              error: (err) => {
-                console.error('Error creating Grade Sheet:', err);
-                this.errorMessage = 'Failed to create Grade Sheet.';
-              },
-            });
-        },
-        error: () => {
-          this.errorMessage = 'flightDomainSyllabus not found. Invalid name.';
-        },
-      });
+    // Optional validation
+    // if (!this.validateManeuverItems()) return;
   }
 }

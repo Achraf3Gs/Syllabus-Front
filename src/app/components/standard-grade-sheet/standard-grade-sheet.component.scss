@@ -1,105 +1,480 @@
-.syllabus-table {
-  overflow-x: auto;
+.mission-container {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  grid-template-rows: auto 1fr;
+  gap: 10px;
+  height: 100vh;
+  padding: 10px;
+  margin: 0 5rem; // ✅ left and right margin using rem
+  box-sizing: border-box;
+  padding-bottom: 100px; /* Adjust if needed */
+}
+.custom-modal-width {
+  max-width: 75vw;  /* or 1000px, 1200px, etc. */
+  width: 75vw;
+}
+
+
+.mission-information {
+  grid-column: 1 / span 2;
+  background-color: #999;
+  color: white;
+  text-align: center;
+  padding: 20px;
+  font-weight: bold;
+}
+
+.mission-rating {
+  background-color: #4a90e2;
+  color: white;
+  text-align: center;
+  padding: 0px;
+}
+
+.right-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.mission-comments {
+  flex: 1;
+  background-color: #28a745;
+  color: white;
+  text-align: center;
+  padding: 20px;
+}
+
+.mission-status {
+  background-color: #f39c12;
+  color: white;
+  text-align: center;
+  padding: 15px;
+}
+
+.mission-activities {
+  background-color: #f1c40f;
+  color: black;
+  text-align: center;
+  padding: 15px;
+  font-weight: bold;
+}
+/* Mission information */
+.header-section {
+  background-color: #a5a4a4; // light gray background
+  padding: 1rem;
 
   table {
     width: 100%;
     border-collapse: collapse;
     text-align: center;
-    font-family: Arial, sans-serif;
-    border: 2px solid black; // Optional: bold outer border
+    border: 2px solid #000; // black border for the table
 
     th,
     td {
-      border: 1px solid black; // changed from #999 to black
-      padding: 8px;
-      min-width: 60px;
+      padding: 0.75rem 1rem;
+      color: #000; // black text
+      border: 1px solid #000; // black border for cells
     }
 
     th {
-      background-color: #cfe2f3;
       font-weight: bold;
+      background-color: #9a9797;
     }
+  }
+  /*-------------------- blue Section --------------------*/
 
-    .basic-header {
-      background-color: #4acc61;
-    }
+  /*-------------------- Green Section --------------------*/
+  .mission-comments {
+    height: 100%;
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #b7e1cd;
+    border: 2px solid #000;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
 
-    .advanced-header {
-      background-color: #f5f228;
-    }
-
-    .mif {
-      background-color: #ba74e6;
-    }
-
-    .maneuver {
-      background-color: #d9d2e9;
+    .comments-header {
+      text-align: center;
       font-weight: bold;
+      font-size: 12px;
+      color: #333;
+      background-color: #d4edda;
+      border: 2px solid #000;
+      padding: 10px;
+      margin-bottom: 10px;
     }
 
-    .mif-cell {
-      background-color: #f9cb9c;
-      font-weight: bold;
+    .overall-section {
+      margin-bottom: 10px;
+
+      h3 {
+        font-size: 10px;
+        margin-bottom: 0.5rem;
+        font-weight: bold;
+        color: #333;
+      }
+
+      .overall-grade {
+        height: 150px;
+        font-size: 12px;
+        border: 2px solid #000;
+        padding: 10px;
+        text-align: left;
+        background-color: #fff;
+      }
     }
 
-    .date {
-      background-color: #a1a9eb;
-    }
+    .maneuver-comments {
+      flex: 1 1 auto;
+      display: flex;
+      flex-direction: column;
 
-    .grade {
-      background-color: #ece7f1;
-    }
+      h3 {
+        font-size: 10px;
+        margin-bottom: 0.5rem;
+        font-weight: bold;
+        color: #333;
+      }
 
-    .grade-F {
-      background-color: #f4cccc;
-    }
+      textarea {
+        flex: 1 1 auto;
+        min-height: 0;
+        width: 100%;
+        padding: 10px;
+        border: 2px solid #000;
+        border-radius: 4px;
+        resize: none;
+        font-family: Arial, sans-serif;
+        background-color: transparent;
+        color: #333;
+        font-size: 12px;
 
-    .grade-G {
-      background-color: #d9ead3;
-    }
-
-    .grade-E {
-      background-color: #c9daf8;
-    }
-
-    .grade-U {
-      background-color: #ea9999;
-    }
-
-    .grade-empty {
-      background-color: #eeeeee;
-    }
-
-    td.separator {
-      border-right: 3px dashed green;
-    }
-
-    thead tr:nth-child(2) th:nth-child(5),
-    thead tr:nth-child(3) th:nth-child(5) {
-      border-left: 3px dashed green;
+        &:focus {
+          outline: none;
+          border-color: #007bff;
+          box-shadow: 0 0 4px rgba(0, 123, 255, 0.5);
+        }
+      }
     }
   }
 
-  .below-mif {
-    background-color: #db3a3a !important;
-    max-width: 10px;
+  /*-------------------- Orange Section --------------------*/
+  .mission-status {
+    background-color: orange !important;
+    border: 2px solid black !important;
+    padding: 15px;
+    height: 50px;
+    font-size: 0.05rem;
+    overflow-y: auto;
+
+    .table {
+      width: 100%;
+      text-align: center;
+      border: 2px solid #000; // black border for the table
+
+      td {
+        padding: 0.75rem 1rem;
+        color: #000; // black text
+        border: 1px solid #000; // black border for cells
+      }
+
+      th {
+        font-weight: bold;
+        background-color: #9a9797;
+      }
+    }
+
+    .form-check {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.5rem;
+
+      .form-check-label {
+        margin-right: 10px;
+        flex: 1;
+        text-align: left;
+      }
+
+      .form-check-input {
+        flex-shrink: 0;
+      }
+    }
   }
 
-  .meets-mif {
-    background-color: #cad0d5 !important;
+  .mission-container {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    grid-template-rows: auto 1fr;
+    gap: 10px;
+    height: 100vh;
+    padding: 10px;
+    margin: 0 5rem; // ✅ left and right margin using rem
+    box-sizing: border-box;
   }
- .syllabus-wrapper {
-  width: 100%;
+
+  .mission-information {
+    grid-column: 1 / span 2;
+    background-color: #999;
+    color: white;
+    text-align: center;
+    padding: 20px;
+    font-weight: bold;
+  }
+
+  .mission-rating {
+    background-color: #4a90e2;
+    color: white;
+    text-align: center;
+    padding: 20px;
+  }
+
+  .right-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .mission-comments {
+    flex: 1;
+    background-color: #28a745;
+    color: white;
+    text-align: center;
+    padding: 20px;
+  }
+
+  .mission-status {
+    background-color: #f39c12;
+    color: white;
+    text-align: center;
+    padding: 15px;
+  }
+
+  .mission-activities {
+    background-color: #f1c40f;
+    color: black;
+    text-align: center;
+    padding: 15px;
+    font-weight: bold;
+  }
+  /* Mission information */
+  .header-section {
+    background-color: #a5a4a4; // light gray background
+    padding: 1rem;
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: center;
+      border: 2px solid #000; // black border for the table
+
+      th,
+      td {
+        padding: 0.75rem 1rem;
+        color: #000; // black text
+        border: 1px solid #000; // black border for cells
+      }
+
+      th {
+        font-weight: bold;
+        background-color: #9a9797;
+      }
+    }
+
+    /*-------------------- Green Section --------------------*/
+    .mission-comments {
+      height: 100%;
+      max-width: 600px;
+      margin: 20px auto;
+      padding: 20px;
+      background-color: #b7e1cd;
+      border: 2px solid #000;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      display: flex;
+      flex-direction: column;
+
+      .comments-header {
+        text-align: center;
+        font-weight: bold;
+        font-size: 12px;
+        color: #333;
+        background-color: #d4edda;
+        border: 2px solid #000;
+        padding: 10px;
+        margin-bottom: 10px;
+      }
+
+      .overall-section {
+        margin-bottom: 10px;
+
+        h3 {
+          font-size: 10px;
+          margin-bottom: 0.5rem;
+          font-weight: bold;
+          color: #333;
+        }
+
+        .overall-grade {
+          height: 150px;
+          font-size: 12px;
+          border: 2px solid #000;
+          padding: 10px;
+          text-align: left;
+          background-color: #fff;
+        }
+      }
+
+      .maneuver-comments {
+        flex: 1 1 auto;
+        display: flex;
+        flex-direction: column;
+
+        h3 {
+          font-size: 10px;
+          margin-bottom: 0.5rem;
+          font-weight: bold;
+          color: #333;
+        }
+
+        textarea {
+          flex: 1 1 auto;
+          min-height: 0;
+          width: 100%;
+          padding: 10px;
+          border: 2px solid #000;
+          border-radius: 4px;
+          resize: none;
+          font-family: Arial, sans-serif;
+          background-color: transparent;
+          color: #333;
+          font-size: 12px;
+
+          &:focus {
+            outline: none;
+            border-color: #007bff;
+            box-shadow: 0 0 4px rgba(0, 123, 255, 0.5);
+          }
+        }
+      }
+    }
+
+    /*-------------------- Orange Section --------------------*/
+    .mission-status {
+      background-color: orange !important;
+      border: 2px solid black !important;
+      padding: 15px;
+      height: 50px;
+      font-size: 0.05rem;
+      overflow-y: auto;
+
+      .table {
+        width: 100%;
+        text-align: center;
+        border: 2px solid #000; // black border for the table
+
+        td {
+          padding: 0.75rem 1rem;
+          color: #000; // black text
+          border: 1px solid #000; // black border for cells
+        }
+
+        th {
+          font-weight: bold;
+          background-color: #9a9797;
+        }
+      }
+
+      .form-check {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 0.5rem;
+
+        .form-check-label {
+          margin-right: 10px;
+          flex: 1;
+          text-align: left;
+        }
+
+        .form-check-input {
+          flex-shrink: 0;
+        }
+      }
+    }
+
+    /*-------------------- Yellow Section --------------------*/
+    .mission-activities {
+      .activities-table {
+        width: 100%;
+        border-collapse: collapse;
+        background-color: #fdb913; // Yellow background
+        border: 3px solid black; // Full table border
+
+        th,
+        td {
+          border: 2px solid black;
+          padding: 10px;
+          font-weight: bold;
+          text-align: left; // Left align by default
+        }
+
+        thead th {
+          text-align: center; // Center header only
+          font-size: 1.2rem;
+        }
+      }
+    }
+  }
+}
+
+.fixed-buttons {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  gap: 15px;
+  z-index: 1000;
 }
 
-.syllabus-title {
-  text-align: center;
-  font-size: 24px;
+.action-button {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
   font-weight: bold;
-  margin-bottom: 20px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
+/* Print button style */
+.print-button {
+  background-color: #2196f3;
+  color: white;
+}
+
+.print-button:hover {
+  background-color: #1976d2;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* Save button style */
+.save-button {
+  background-color: #4caf50;
+  color: white;
+}
+
+.save-button:hover {
+  background-color: #45a049;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+.grade-sheet-container {
+  padding-bottom: 100px; /* Adjust if needed */
 }

@@ -18,6 +18,7 @@
           id="flightDomainSyllabus"
           placeholder="Select Flight Domain Syllabus"
           [(ngModel)]="flightDomainSyllabus"
+          (ngModelChange)="onFlightDomainSyllabusChange($event)"
           name="flightDomainSyllabus"
         >
           <option [ngValue]="null" disabled selected>
@@ -31,14 +32,20 @@
       <!-- Maneuver Name Input -->
       <div class="col-md-4">
         <h5>Select Grade Sheet block's number</h5>
-        <input
-          type="text"
-          class="form-control"
-          placeholder="Grade Sheet block number"
-          aria-label="Grade Sheet block"
+        <select
+          class="form-select"
+          id="block"
+          name="block"
           [(ngModel)]="formData.block"
-          name="Grade Sheet block"
-        />
+          [disabled]="!flightDomainSyllabus || blocks.length === 0"
+        >
+          <option [ngValue]="null" disabled selected>
+            Select a block
+          </option>
+          <option *ngFor="let block of blocks" [ngValue]="block">
+            {{ block }}
+          </option>
+        </select>
       </div>
     </div>
 
@@ -220,9 +227,10 @@
     <div class="mission-rating">
       <div class="container mt-4">
         <table class="table table-bordered text-center align-middle">
-          <thead class="table-primary">
+<thead class="table-primary">
             <tr>
               <th colspan="5">RATING</th>
+              <th>Actions</th>
               <th>MIF</th>
               <th colspan="3">MANEUVERS</th>
             </tr>
@@ -232,14 +240,14 @@
               <th>F</th>
               <th>U</th>
               <th>NG</th>
+              <th>Actions</th>
               <th>MIF</th>
               <th>ID</th>
               <th colspan="2">Description</th>
             </tr>
-
             <!-- Dropdown Selector Row -->
             <tr>
-              <td colspan="9" class="p-3">
+              <td colspan="10" class="p-3">
                 <label for="maneuverSelect" class="form-label fw-bold me-2">
                   Select Flight Domain:
                 </label>
@@ -254,7 +262,6 @@
                   </option>
                 </select>
               </td>
-
             </tr>
           </thead>
 
@@ -265,7 +272,7 @@
             >
               <!-- Group Header -->
               <tr style="background-color: #007bff; color: white">
-                <td colspan="9" class="text-left fw-bold">{{ group.name }}</td>
+                <td colspan="10" class="text-left fw-bold">{{ group.name }}</td>
               </tr>
 
               <!-- Items in the Group -->
@@ -309,6 +316,11 @@
                     value="NG"
                     [(ngModel)]="item.rating"
                   />
+                </td>
+                <td>
+                  <button type="button" class="btn btn-danger btn-sm" (click)="removeManeuverItem(gIndex, i)">
+                    <fa-icon [icon]="faTrash"></fa-icon>
+                  </button>
                 </td>
 
                 <td

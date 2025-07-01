@@ -19,26 +19,47 @@
   <div class="col-md-6 d-flex align-items-center justify-content-center">
     <div class="w-100 text-center">
       <div class="row">
-        <div class="col-4">
-          <button type="button" class="btn btn-link p-0 w-100">
+        <div class="col-6">
+          <button type="button" class="btn btn-link p-0 w-100" data-bs-toggle="modal" [attr.data-bs-target]="'#updateSortiesTypeModal-' + sortiesType.id" (click)="openUpdateModal(sortiesType)">
             <fa-icon [icon]="faPen"></fa-icon><br />
             Modify
           </button>
         </div>
-        <div class="col-4">
+        <div class="col-6">
           <button type="button" class="btn btn-link p-0 w-100"
           (click)="deleteSortiesType(sortiesType.id)">
             <fa-icon [icon]="faTrash"></fa-icon><br />
             Delete
           </button>
         </div>
-        <div class="col-4">
-          <button type="button" class="btn btn-link p-0 w-100">
-            <fa-icon [icon]="faCircleInfo"></fa-icon><br />
-            Details
+       
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Update Modal -->
+<div class="modal fade" [id]="'updateSortiesTypeModal-' + sortiesType.id" tabindex="-1" aria-labelledby="updateSortiesTypeModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="updateSortiesTypeModalLabel">Modify SortiesType</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form #sortiesTypeForm="ngForm" (ngSubmit)="updateSortiesType()">
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="SortiesTypeName" class="form-label">SortiesTypeName</label>
+            <input type="text" class="form-control" id="sortiesTypeName" name="sortiesTypeName" [(ngModel)]="selectedSortiesType.sortiesTypeName" required>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary" [disabled]="!sortiesTypeForm.form.valid" data-bs-dismiss="modal">
+            <fa-icon [icon]="faFloppyDisk"></fa-icon>&nbsp;Save changes
           </button>
         </div>
-      </div>
+      </form>
     </div>
   </div>
 </div>

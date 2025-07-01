@@ -30,4 +30,13 @@ export class SortiesTypesService {
   deleteSortiesType(SortiesTypeId: number): Observable<any> {
     return this.http.delete(`${this.urlSortiesTypes}/delete/${SortiesTypeId}`);
   }
+   updateSortiesType(
+          sortiesTypeId: number,
+          myform: SortiesType   
+        ): Observable<any> {
+          return this.http.put(
+            `${this.urlSortiesTypes}/update/${sortiesTypeId}`,
+            myform
+          );
+        }
 }

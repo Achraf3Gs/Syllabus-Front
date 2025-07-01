@@ -71,21 +71,16 @@
           <button
             type="button"
             class="btn btn-link p-0 w-100"
-            data-bs-toggle="modal"
-            data-bs-target="#exampleModal"
+            data-bs-toggle="modal" [attr.data-bs-target]="'#updateSyllabusModal-' + syllabus.id" (click)="openUpdateModal(syllabus)"
           >
             <fa-icon [icon]="faPen"></fa-icon><br />
             Modify
           </button>
         </div>
         <div class="col-6">
-          <button
-            type="button"
-            class="btn btn-link p-0 w-100"
-            data-bs-toggle="modal"
-            data-bs-target="#exampleModal"
-          >
-            <fa-icon [icon]="faUserSlash"></fa-icon><br />
+        <button type="button" class="btn btn-link p-0 w-100"
+          (click)="deleteSyllabus(syllabus.id)">
+            <fa-icon [icon]="faTrash"></fa-icon><br />
             Delete
           </button>
         </div>
@@ -95,51 +90,26 @@
 
 </div>
 
-<!-- Modal -->
-<div
-  class="modal fade"
-  id="exampleModal"
-  tabindex="-1"
-  aria-labelledby="exampleModalLabel"
-  aria-hidden="true"
->
+<!-- Update Modal -->
+<div class="modal fade" [id]="'updateSyllabusModal-' + syllabus.id" tabindex="-1" aria-labelledby="updateSyllabusLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalLabel">Modify the Syllabus</h1>
-        <button
-          type="button"
-          class="btn-close"
-          data-bs-dismiss="modal"
-          aria-label="Close"
-        ></button>
+        <h1 class="modal-title fs-5" id="updateSyllabusModalLabel">Modify Syllabus</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <form id="syllabusForm">
+      <form #syllabusForm="ngForm" (ngSubmit)="updateSyllabus()">
         <div class="modal-body">
           <div class="mb-3">
-            <label for="syllabusType" class="form-label">Syllabus Type</label>
-            <input type="text" class="form-control" id="syllabusType" name="syllabusType" required />
-          </div>
-          <div class="mb-3">
-            <label for="firstName" class="form-label">First Name</label>
-            <input type="text" class="form-control" id="firstName" name="firstName" required />
-          </div>
-          <div class="mb-3">
-            <label for="lastName" class="form-label">Last Name</label>
-            <input type="text" class="form-control" id="lastName" name="lastName" required />
-          </div>
-          <div class="mb-3">
-            <label for="grade" class="form-label">Grade</label>
-            <input type="text" class="form-control" id="grade" name="grade" required />
-          </div>
-          <div class="mb-3">
-            <label for="callSign" class="form-label">Call Sign</label>
-            <input type="text" class="form-control" id="callSign" name="callSign" required />
+            <label for="SyllabusTitle" class="form-label">SyllabusTitle</label>
+            <input type="text" class="form-control" id="SyllabusTitle" name="SyllabusTitle" [(ngModel)]="selectedSyllabus.title" required>
           </div>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="submit" class="btn btn-primary"> <fa-icon [icon]="faFloppyDisk"></fa-icon>&nbsp;Save changes</button>
+          <button type="submit" class="btn btn-primary" [disabled]="!syllabusForm.form.valid" data-bs-dismiss="modal">
+            <fa-icon [icon]="faFloppyDisk"></fa-icon>&nbsp;Save changes
+          </button>
         </div>
       </form>
     </div>

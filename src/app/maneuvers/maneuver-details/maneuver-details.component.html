@@ -1,43 +1,26 @@
 <div class="row mb-1 ms-2 me-2 custom-border p-0">
   <!-- Image Section -->
-  <div
-    class="col-md-1 d-flex align-items-center justify-content-center border-right"
-  >
+  <div class="col-md-1 d-flex align-items-center justify-content-center border-right">
     <div class="p-1 text-center">
-      <img
-        src="/images/MANEUVER.jpg"
-        alt="Photo"
-        class="img-fluid"
-        width="100px"
-        height="200px"
-      />
+      <img src="/images/MANEUVER.jpg" alt="Photo" class="img-fluid" width="100px" height="200px" />
     </div>
   </div>
 
   <!-- Details Section -->
-  <div
-    class="col-md-5 d-flex align-items-center justify-content-center border-right"
-  >
+  <div class="col-md-5 d-flex align-items-center justify-content-center border-right">
     <div class="text-center w-100">
       <div class="d-flex align-items-center mb-2">
         <fa-icon [icon]="faInfo" class="me-2 blue-color"></fa-icon>
-        <span style="color: blue; font-size: 1.5rem; font-weight: bold">Flight Domain :  </span>
+        <span style="color: blue; font-size: 1.5rem; font-weight: bold">Flight Domain : </span>
         <span style="font-weight: bold; font-size: 1.5rem;">{{ flightDomain.name }}</span>
       </div>
     </div>
   </div>
 
   <!-- E-Syllabus Section -->
-  <div
-    class="col-md-3 d-flex align-items-center justify-content-center border-right"
-  >
+  <div class="col-md-3 d-flex align-items-center justify-content-center border-right">
     <div class="text-center">
-      <button
-        type="button"
-        class="btn btn-link p-0 w-100"
-        data-bs-toggle="modal"
-        [attr.data-bs-target]="'#detailsModal_' + flightDomain.id"
-      >
+      <button type="button" class="btn btn-link p-0 w-100" data-bs-toggle="modal" [attr.data-bs-target]="'#detailsModal_' + flightDomain.id">
         maneuver-details
       </button>
     </div>
@@ -48,23 +31,13 @@
     <div class="w-100 text-center">
       <div class="row">
         <div class="col-6">
-          <button
-            type="button"
-            class="btn btn-link p-0 w-100"
-            data-bs-toggle="modal"
-            [attr.data-bs-target]="'#actionModal_' + flightDomain.id"
-          >
+          <button type="button" class="btn btn-link p-0 w-100" data-bs-toggle="modal" [attr.data-bs-target]="'#updateFlightDomainModal-' + flightDomain.id" (click)="openUpdateModal(flightDomain)">
             <fa-icon [icon]="faPen"></fa-icon><br />
             Modify
           </button>
         </div>
         <div class="col-6">
-          <button
-            type="button"
-            class="btn btn-link p-0 w-100"
-            data-bs-toggle="modal"
-            [attr.data-bs-target]="'#actionModal_' + flightDomain.id"
-          >
+          <button type="button" class="btn btn-link p-0 w-100" data-bs-toggle="modal" [attr.data-bs-target]="'#deleteFlightDomainModal-' + flightDomain.id">
             <fa-icon [icon]="faTrash"></fa-icon><br />
             Delete
           </button>
@@ -74,28 +47,60 @@
   </div>
 </div>
 
-<!-- Details Modal -->
-<div
-  class="modal fade"
-  [id]="'detailsModal_' + flightDomain.id"
-  data-bs-backdrop="static"
-  data-bs-keyboard="false"
-  tabindex="-1"
-  aria-labelledby="detailsModalLabel"
-  aria-hidden="true"
->
+<!-- Update Modal -->
+<div class="modal fade" [id]="'updateFlightDomainModal-' + flightDomain.id" tabindex="-1" aria-labelledby="updateFlightDomainModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="updateFlightDomainModalLabel">Modify Flight Domain</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form #domainForm="ngForm" (ngSubmit)="updateFlightDomain()">
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="domainName" class="form-label">Name</label>
+            <input type="text" class="form-control" id="domainName" name="domainName" [(ngModel)]="selectedFlightDomain.name" required>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary" [disabled]="!domainForm.form.valid" data-bs-dismiss="modal">
+            <fa-icon [icon]="faFloppyDisk"></fa-icon>&nbsp;Save changes
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" [id]="'deleteFlightDomainModal-' + flightDomain.id" tabindex="-1" aria-labelledby="deleteFlightDomainModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="deleteFlightDomainModalLabel">Confirm Deletion</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Are you sure you want to delete the flight domain "{{ flightDomain.name }}"?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-danger" (click)="flightDomain.id && deleteFlightDomain(flightDomain.id)" data-bs-dismiss="modal">Delete</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Details Modal (Existing) -->
+<div class="modal fade" [id]="'detailsModal_' + flightDomain.id" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="detailsModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
         <h1 class="modal-title fs-5" id="detailsModalLabel">
           {{ flightDomain.name }}
         </h1>
-        <button
-          type="button"
-          class="btn-close"
-          data-bs-dismiss="modal"
-          aria-label="Close"
-        ></button>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
         <p *ngFor="let item of maneuverItem">{{ item.name }}</p>

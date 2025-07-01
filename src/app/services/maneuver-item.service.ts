@@ -23,7 +23,7 @@ export class ManeuverItemService {
   }
 
   updateManeuverItem(
-    myform: ManeuverItem,
+    myform: { name: string },
     FlightDoaminId: number,
     ManeuverItemId: number
   ): Observable<any> {
@@ -33,7 +33,11 @@ export class ManeuverItemService {
     );
   }
 
-  deleteManeuverItem(ManeuverItemId: number): Observable<any> {
-    return this.http.delete(`${this.urlmaneuverItem}/delete/${ManeuverItemId}`);
+  deleteManeuverItem(
+    maneuverItemId: number
+  ): Observable<any> {
+    return this.http.delete(
+      `${this.urlmaneuverItem}/delete/${maneuverItemId}`
+    );
   }
 }

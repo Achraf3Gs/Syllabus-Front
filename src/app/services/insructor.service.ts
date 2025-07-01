@@ -28,4 +28,13 @@ export class InsructorService {
   createInstructor(myform: Instructor): Observable<any> {
     return this.http.post(`${this.urlInstructors}/add`, myform);
   }
+   updateInstructor(
+            instructorId: number,
+            myform: Instructor   
+          ): Observable<any> {
+            return this.http.put(
+              `${this.urlInstructors}/update/${instructorId}`,
+              myform
+            );
+          }
 }

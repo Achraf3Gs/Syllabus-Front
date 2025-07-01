@@ -11,7 +11,35 @@
   <div class="mission-container">
     <div class="row mb-3 pe-5">
       <!-- Maneuver Group Dropdown -->
-
+      <div class="col-md-4">
+        <h5>Select Flight Domain Syllabus</h5>
+        <select
+          class="form-select"
+          id="flightDomainSyllabus"
+          placeholder="Select Flight Domain Syllabus"
+          [(ngModel)]="flightDomainSyllabus"
+          name="flightDomainSyllabus"
+        >
+          <option [ngValue]="null" disabled selected>
+            Select Flight Domain Syllabus
+          </option>
+          <option *ngFor="let fd of flightDomainsSyllabus" [ngValue]="fd">
+            {{ fd.name }}
+          </option>
+        </select>
+      </div>
+      <!-- Maneuver Name Input -->
+      <div class="col-md-4">
+        <h5>Select Grade Sheet block's number</h5>
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Grade Sheet block number"
+          aria-label="Grade Sheet block"
+          [(ngModel)]="formData.block"
+          name="Grade Sheet block"
+        />
+      </div>
     </div>
 
     <div class="mission-information">
@@ -63,8 +91,13 @@
                 <div class="d-flex align-items-center">
                   <!-- Student Dropdown -->
                   <div class="col-md-4 me-2">
-                    <select class="form-select" id="student" name="student">
-                      <option value="" disabled selected>#####</option>
+                    <select
+                      class="form-select"
+                      id="student"
+                      [(ngModel)]="formData.student"
+                      name="student"
+                    >
+                      <option value="" disabled selected>Student</option>
                       <option
                         *ngFor="let student of students"
                         [value]="student.callSign"
@@ -82,9 +115,11 @@
                     <select
                       class="form-select"
                       id="crewMember"
+                      [(ngModel)]="formData.crewMember"
                       name="crewMember"
+                      (change)="onCrewMemberChange($event)"
                     >
-                      <option value="" disabled selected>#####</option>
+                      <option value="" disabled selected>Instructor</option>
                       <option
                         *ngFor="let instructor of instructors"
                         [value]="instructor.callSign"
@@ -98,7 +133,12 @@
               <td>
                 <!-- Aircraft Dropdown -->
                 <div class="col-md-10">
-                  <select class="form-select" id="aircraft" name="aircraft">
+                  <select
+                    class="form-select"
+                    id="aircraft"
+                    [(ngModel)]="formData.aircraft"
+                    name="aircraft"
+                  >
                     <option value="" disabled selected>Ac</option>
                     <option *ngFor="let ac of aircrafts" [value]="ac.id">
                       {{ ac.registration }}
@@ -125,6 +165,7 @@
                     class="form-control"
                     id="instructorName"
                     placeholder="instructorName"
+                    [(ngModel)]="formData.instructorName"
                     name="instructorName"
                     readonly
                   />
@@ -212,25 +253,21 @@
             <!-- Dropdown Selector Row -->
             <tr>
               <td colspan="9" class="p-3">
-                <label for="maneuverSelect" class="form-label fw-bold me-2"
-                  >Select Flight Domain:</label
-                >
+                <label for="maneuverSelect" class="form-label fw-bold me-2">
+                  Select Flight Domain:
+                </label>
                 <select
                   class="form-select d-inline w-auto"
                   [(ngModel)]="selectedGroupId"
                   (ngModelChange)="onGroupChange($event)"
                 >
-                  <option value="" disabled selected>
-                    Select Flight Domain
-                  </option>
-                  <option
-                    *ngFor="let flightDomain of flightDomains"
-                    [value]="flightDomain.id"
-                  >
+                  <option value="" disabled selected>Select Flight Domain</option>
+                  <option *ngFor="let flightDomain of flightDomains" [value]="flightDomain.id">
                     {{ flightDomain.name }}
                   </option>
                 </select>
               </td>
+
             </tr>
           </thead>
 
@@ -516,7 +553,7 @@
           <div class="p-2 border border-dark">COMMENTS</div>
           <div class="p-2 border border-dark">
             <div class="d-flex justify-content-between align-items-center mb-2">
-              <button class="btn btn-primary">
+              <button class="btn btn-primary" (click)="calculateOverallRating()">
                 <i class="bi bi-calculator me-1"></i> Calculate Overall Grade
               </button>
             </div>
@@ -539,10 +576,12 @@
           <div class="p-2 flex-grow-1 d-flex flex-column border border-dark">
             <h4 style="text-align: left">Maneuver Item Comments:</h4>
             <textarea
+              [(ngModel)]="comments"
               class="form-control flex-grow-1"
               placeholder="Enter comments here..."
             ></textarea>
           </div>
+
         </div>
       </div>
 
@@ -569,6 +608,8 @@
                     class="form-check-input"
                     type="checkbox"
                     id="executed"
+                    [checked]="formData2.sortieStatus === 'EXECUTED'"
+                    (change)="onSortieStatusChange('EXECUTED')"
                   />
                 </div>
 
@@ -582,6 +623,8 @@
                     class="form-check-input"
                     type="checkbox"
                     id="partiallyExecuted"
+                    [checked]="formData2.sortieStatus === 'PARTIALLY_EXECUTED'"
+                    (change)="onSortieStatusChange('PARTIALLY_EXECUTED')"
                   />
                 </div>
 
@@ -595,9 +638,12 @@
                     class="form-check-input"
                     type="checkbox"
                     id="nonExecuted"
+                    [checked]="formData2.sortieStatus === 'NON_EXECUTED'"
+                    (change)="onSortieStatusChange('NON_EXECUTED')"
                   />
                 </div>
               </td>
+
 
               <!-- SORTIE MARKS -->
               <td>
@@ -611,7 +657,8 @@
                     class="form-check-input"
                     type="checkbox"
                     id="clearedSolo"
-
+                    [checked]="formData2.sortieRemarks.includes('CLEARED_SOLO')"
+                    (change)="onSortieRemarksChange('CLEARED_SOLO')"
                   />
                 </div>
 
@@ -625,7 +672,8 @@
                     class="form-check-input"
                     type="checkbox"
                     id="safetyMark"
-
+                    [checked]="formData2.sortieRemarks.includes('SAFETY_MARK')"
+                    (change)="onSortieRemarksChange('SAFETY_MARK')"
                   />
                 </div>
 
@@ -639,7 +687,10 @@
                     class="form-check-input"
                     type="checkbox"
                     id="sicknessMark"
-
+                    [checked]="
+                      formData2.sortieRemarks.includes('SICKNESS_MARK')
+                    "
+                    (change)="onSortieRemarksChange('SICKNESS_MARK')"
                   />
                 </div>
               </td>
@@ -662,19 +713,23 @@
                 <input
                   type="number"
                   class="form-control"
+                  [(ngModel)]="formData3.activities.ils"
                   placeholder="0"
                   min="0"
                 />
               </td>
+
               <td>O/H PATTERN</td>
               <td>
                 <input
                   type="number"
                   class="form-control"
+                  [(ngModel)]="formData3.activities.overheadPattern"
                   placeholder="0"
                   min="0"
                 />
               </td>
+
             </tr>
             <tr>
               <td>VOR</td>
@@ -682,19 +737,23 @@
                 <input
                   type="number"
                   class="form-control"
+                  [(ngModel)]="formData3.activities.vor"
                   placeholder="0"
                   min="0"
                 />
               </td>
+
               <td>MISSED APPROACH</td>
               <td>
                 <input
                   type="number"
                   class="form-control"
+                  [(ngModel)]="formData3.activities.missedApproach"
                   placeholder="0"
                   min="0"
                 />
               </td>
+
             </tr>
             <tr>
               <td>RNAV</td>
@@ -702,19 +761,23 @@
                 <input
                   type="number"
                   class="form-control"
+                  [(ngModel)]="formData3.activities.rnav"
                   placeholder="0"
                   min="0"
                 />
               </td>
+
               <td>LANDINGS</td>
               <td>
                 <input
                   type="number"
                   class="form-control"
+                  [(ngModel)]="formData3.activities.landings"
                   placeholder="0"
                   min="0"
                 />
               </td>
+
             </tr>
           </tbody>
         </table>

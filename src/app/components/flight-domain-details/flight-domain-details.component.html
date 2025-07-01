@@ -1,9 +1,9 @@
 <div class="row mb-1 ms-5 me-5 custom-border p-0">
-  <!-- Registration with Icon -->
+  <!-- Flight Domain Name with Icon -->
   <div class="col-md-6 d-flex justify-content-start align-items-center border-right">
     <div class="d-flex align-items-center">
       <fa-icon [icon]="faRocket" class="me-2 blue-color"></fa-icon>
-      <span style="font-weight: bold;">{{ flightDomain?.name }}</span>
+      <span style="font-weight: bold;">{{ flightDomain.name }}</span>
     </div>
   </div>
 
@@ -11,26 +11,46 @@
   <div class="col-md-6 d-flex align-items-center justify-content-center">
     <div class="w-100 text-center">
       <div class="row">
-        <div class="col-4">
-          <button type="button" class="btn btn-link p-0 w-100">
+        <div class="col-6">
+          <button type="button" class="btn btn-link p-0 w-100" data-bs-toggle="modal" [attr.data-bs-target]="'#updateFlightDomainModal-' + flightDomain.id" (click)="openUpdateModal(flightDomain)">
             <fa-icon [icon]="faPen"></fa-icon><br />
             Modify
           </button>
         </div>
-        <div class="col-4">
-          <button type="button" class="btn btn-link p-0 w-100"
-          (click)="deleteFlightDomain(flightDomain.id)">
+        <div class="col-6">
+          <button type="button" class="btn btn-link p-0 w-100" (click)="flightDomain.id && deleteFlightDomain(flightDomain.id)">
             <fa-icon [icon]="faTrash"></fa-icon><br />
             Delete
           </button>
         </div>
-        <div class="col-4">
-          <button type="button" class="btn btn-link p-0 w-100">
-            <fa-icon [icon]="faCircleInfo"></fa-icon><br />
-            Details
+       
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Update Modal -->
+<div class="modal fade" [id]="'updateFlightDomainModal-' + flightDomain.id" tabindex="-1" aria-labelledby="updateFlightDomainModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="updateFlightDomainModalLabel">Modify Flight Domain</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form #domainForm="ngForm" (ngSubmit)="updateFlightDomain()">
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="domainName" class="form-label">Name</label>
+            <input type="text" class="form-control" id="domainName" name="domainName" [(ngModel)]="selectedFlightDomain.name" required>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary" [disabled]="!domainForm.form.valid" data-bs-dismiss="modal">
+            <fa-icon [icon]="faFloppyDisk"></fa-icon>&nbsp;Save changes
           </button>
         </div>
-      </div>
+      </form>
     </div>
   </div>
 </div>

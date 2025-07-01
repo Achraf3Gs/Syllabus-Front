@@ -50,7 +50,7 @@ export class FilghtDomainGradeSheetDetailsComponent {
     });
   }
   goToGradeSheetDetails2() {
-    this.router.navigate(['/newGradeSheet'], {
+    this.router.navigate(['/updateGradeSheet'], {
       state: {
         flightDomainGradeSheet: this.flightDomainGradeSheet,
         isUpdate: true, // 👈 Add this flag

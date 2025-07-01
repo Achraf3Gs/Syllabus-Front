@@ -9,6 +9,7 @@ import {
 } from '@angular/common/http';
 import { catchError, throwError, Observable, finalize } from 'rxjs';
 
+import { Router } from '@angular/router';
 import { AuthUserService } from './authuser.service';
 import { environment } from '../environments/environment';
 
@@ -19,7 +20,8 @@ export class AuthInterceptor implements HttpInterceptor {
 
   constructor(
     private busyService: BusyService,
-    private authUserService: AuthUserService
+    private authUserService: AuthUserService,
+    private router: Router
   ) {}
 
   intercept(
@@ -43,9 +45,14 @@ export class AuthInterceptor implements HttpInterceptor {
     return next.handle(request).pipe(
       finalize(() => this.busyService.idle()),
       catchError((error: HttpErrorResponse) => {
-        if (error.status === 401) {
-          localStorage.setItem('attemptedURL', request.url);
-          this.authUserService.logout();
+        if (error.status === 401 || error.status === 403) {
+          // Save the URL the user was trying to access.
+          localStorage.setItem('attemptedURL', this.router.url);
+
+          // Perform a client-side-only logout to avoid an infinite loop.
+          // The regular logout() method makes an HTTP call which would also fail.
+          localStorage.removeItem('access_Token');
+          this.router.navigate(['/login']);
         }
         return throwError(() => error);
       })

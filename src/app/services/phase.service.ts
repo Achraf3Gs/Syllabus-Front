@@ -29,4 +29,14 @@ export class PhaseService {
   deletePhase(PhaseId: number): Observable<any> {
     return this.http.delete(`${this.urlPhase}/delete/${PhaseId}`);
   }
+ updatePhase(
+        phaseId: number,
+        myform: Phase   
+      ): Observable<any> {
+        return this.http.put(
+          `${this.urlPhase}/update/${phaseId}`,
+          myform
+        );
+      }
+
 }

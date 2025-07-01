@@ -30,4 +30,14 @@ export class FlightDomainService {
   deleteFlightDomain(flightDomainId: number): Observable<any> {
     return this.http.delete(`${this.urlflightDomain}/delete/${flightDomainId}`);
   }
+
+    updateFlightDomain(
+        flightDomainId: number,
+        myform: { name: string }
+      ): Observable<any> {
+        return this.http.put(
+          `${this.urlflightDomain}/update/${ flightDomainId}`,
+          myform
+        );
+      }
 }

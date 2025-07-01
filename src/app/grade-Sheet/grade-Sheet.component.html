@@ -1,11 +1,15 @@
-<div class="mission-container ">
+<div class="mission-container">
   <div class="mission-information">
     <!-- Gray Section -->
     <div class="header-section">
       <table>
         <thead>
           <tr>
-            <th colspan="7" class="text-center" style="font-size: 24px; font-weight: bold;">
+            <th
+              colspan="7"
+              class="text-center"
+              style="font-size: 24px; font-weight: bold"
+            >
               {{ formData.name }}
             </th>
           </tr>
@@ -44,7 +48,7 @@
                     [(ngModel)]="formData.student"
                     name="student"
                   >
-                    <option value="" disabled selected>Student</option>
+                    <option value="" disabled selected>####</option>
                     <option
                       *ngFor="let student of students"
                       [value]="student.callSign"
@@ -66,7 +70,7 @@
                     name="crewMember"
                     (change)="onCrewMemberChange($event)"
                   >
-                    <option value="" disabled selected>Instructor</option>
+                    <option value="" disabled selected>####</option>
                     <option
                       *ngFor="let instructor of instructors"
                       [value]="instructor.callSign"
@@ -86,7 +90,7 @@
                   [(ngModel)]="formData.aircraft"
                   name="aircraft"
                 >
-                  <option value="" disabled selected>Ac</option>
+                  <option value="" disabled selected>##</option>
                   <option *ngFor="let ac of aircrafts" [value]="ac.id">
                     {{ ac.registration }}
                   </option>
@@ -112,7 +116,7 @@
                   type="text"
                   class="form-control"
                   id="instructorName"
-                  placeholder="instructorName"
+                  placeholder="#####"
                   [(ngModel)]="formData.instructorName"
                   name="instructorName"
                   readonly
@@ -125,14 +129,13 @@
                 <!-- Sortie Type Dropdown -->
                 <div class="col-md-4 me-2">
                   <input
-                  type="text"
-                  class="form-control"
-                  id="sortieType"
-                  [(ngModel)]="formData.sortieType"
-                  name="sortieType"
-                  placeholder="Enter Sortie Type"
-                />
-
+                    type="text"
+                    class="form-control"
+                    id="sortieType"
+                    [(ngModel)]="formData.sortieType"
+                    name="sortieType"
+                    placeholder="Enter Sortie Type"
+                  />
                 </div>
 
                 <!-- Plus Symbol -->
@@ -160,7 +163,10 @@
                   name="phase"
                 >
                   <option value="" disabled selected>Phase</option>
-                  <option *ngFor="let phase of phases" [value]="phase.phaseName">
+                  <option
+                    *ngFor="let phase of phases"
+                    [value]="phase.phaseName"
+                  >
                     {{ phase.phaseName }}
                   </option>
                 </select>
@@ -173,167 +179,276 @@
   </div>
 
   <!-- Blue Section -->
- <!-- MISSION RATING SECTION -->
-<div class="mission-rating">
-  <div class="container mt-4">
-    <table class="table table-bordered text-center align-middle">
-      <!-- Table Header -->
-      <thead class="table-primary">
-        <tr>
-          <th colspan="5">RATING</th>
-          <th>MIF</th>
-          <th colspan="3">MANEUVERS</th>
-        </tr>
-        <tr>
-          <th>E</th>
-          <th>G</th>
-          <th>F</th>
-          <th>U</th>
-          <th>NG</th>
-          <th>MIF</th>
-          <th>ID</th>
-          <th colspan="2">Description</th>
-        </tr>
+  <!-- MISSION RATING SECTION -->
+  <div class="mission-rating">
+    <div class="container mt-4">
+      <table class="table table-bordered text-center align-middle">
+        <!-- Table Header -->
+        <thead class="table-primary">
+          <tr>
+            <th colspan="5">RATING</th>
+            <th>MIF</th>
+            <th colspan="3">MANEUVERS</th>
+          </tr>
+          <tr>
+            <th>E</th>
+            <th>G</th>
+            <th>F</th>
+            <th>U</th>
+            <th>NG</th>
+            <th>MIF</th>
+            <th>ID</th>
+            <th colspan="2">Description</th>
+          </tr>
 
-        <!-- Flight Domain Selector -->
+          <!-- Flight Domain Selector -->
+        </thead>
 
-      </thead>
+        <!-- Table Body -->
+        <tbody>
+          <!-- Group Header -->
+          <tr style="background-color: #007bff; color: white">
+            <td colspan="9" class="text-left fw-bold">
+              {{ flightDomainGradeSheet.flightDomainSyllabus.name }}
+            </td>
+          </tr>
 
-      <!-- Table Body -->
-      <tbody>
-        <!-- Group Header -->
-        <tr style="background-color: #007bff; color: white">
-          <td colspan="9" class="text-left fw-bold">
-            {{ flightDomainGradeSheet.flightDomainSyllabus.name }}
-          </td>
-        </tr>
+          <!-- Maneuver Rows -->
+          <tr *ngFor="let item of maneuverWithMifDTO; let i = index">
+            <!-- Rating Inputs -->
+            <td>
+              <input
+                type="radio"
+                [name]="'rating' + i"
+                value="E"
+                [(ngModel)]="item.rating"
+              />
+            </td>
+            <td>
+              <input
+                type="radio"
+                [name]="'rating' + i"
+                value="G"
+                [(ngModel)]="item.rating"
+              />
+            </td>
+            <td>
+              <input
+                type="radio"
+                [name]="'rating' + i"
+                value="F"
+                [(ngModel)]="item.rating"
+              />
+            </td>
+            <td>
+              <input
+                type="radio"
+                [name]="'rating' + i"
+                value="U"
+                [(ngModel)]="item.rating"
+              />
+            </td>
+            <td>
+              <input
+                type="radio"
+                [name]="'rating' + i"
+                value="NG"
+                [(ngModel)]="item.rating"
+              />
+            </td>
 
-        <!-- Maneuver Rows -->
-        <tr *ngFor="let item of maneuverWithMifDTO; let i = index">
-          <!-- Rating Inputs -->
-          <td><input type="radio" [name]="'rating' + i" value="E" [(ngModel)]="item.rating" /></td>
-          <td><input type="radio" [name]="'rating' + i" value="G" [(ngModel)]="item.rating" /></td>
-          <td><input type="radio" [name]="'rating' + i" value="F" [(ngModel)]="item.rating" /></td>
-          <td><input type="radio" [name]="'rating' + i" value="U" [(ngModel)]="item.rating" /></td>
-          <td><input type="radio" [name]="'rating' + i" value="NG" [(ngModel)]="item.rating" /></td>
+            <!-- MIF -->
+            <td class="d-flex justify-content-center align-items-center">
+              <input
+                type="text"
+                class="form-control form-control-sm text-center"
+                style="width: 50px"
+                [(ngModel)]="item.mifRequirement"
+                placeholder="0+"
+              />
+            </td>
 
-          <!-- MIF -->
-          <td class="d-flex justify-content-center align-items-center">
-            <input
-              type="text"
-              class="form-control form-control-sm text-center"
-              style="width: 50px"
-              [(ngModel)]="item.mifRequirement"
-              placeholder="0+"
-            />
-          </td>
+            <!-- ID and Maneuver Link -->
+            <td>{{ i + 1 }}</td>
+            <td colspan="2" class="text-start">
+              <a
+                href="#"
+                data-bs-toggle="modal"
+                [attr.data-bs-target]="'#modal_' + i"
+                (click)="currentItem = item"
+              >
+                {{ item.name }}
+              </a>
 
-          <!-- ID and Maneuver Link -->
-          <td>{{ i + 1 }}</td>
-          <td colspan="2" class="text-start">
-            <a
-              href="#"
-              data-bs-toggle="modal"
-              [attr.data-bs-target]="'#modal_' + i"
-              (click)="currentItem = item"
-            >
-              {{ item.name }}
-            </a>
-
-            <!-- Modal for CTS -->
-            <div
-              class="modal fade"
-              [id]="'modal_' + i"
-              tabindex="-1"
-              [attr.aria-labelledby]="'modalLabel_' + i"
-              aria-hidden="true"
-            >
-              <div class="modal-dialog modal-dialog-scrollable custom-modal-width">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <h5 class="modal-title" [id]="'modalLabel_' + i">
-                      {{ item.name }}
-                    </h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                  </div>
-
-                  <div class="modal-body">
-                    <!-- Phase Not Selected -->
-                    <div *ngIf="!formData.phase" class="alert alert-info text-center">
-                      Please select a phase to view CTS criteria.
-                    </div>
-
-                    <!-- Phase Selected: Show CTS -->
-                    <div *ngIf="formData.phase">
-                      <h5 class="mb-3 text-primary text-uppercase">
-                        Showing CTS for: {{ formData.phase }}
+              <!-- Modal for CTS -->
+              <div
+                class="modal fade"
+                [id]="'modal_' + i"
+                tabindex="-1"
+                [attr.aria-labelledby]="'modalLabel_' + i"
+                aria-hidden="true"
+              >
+                <div
+                  class="modal-dialog modal-dialog-scrollable custom-modal-width"
+                >
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" [id]="'modalLabel_' + i">
+                        {{ item.name }}
                       </h5>
-
-                      <table class="table table-bordered text-center">
-                        <thead>
-                          <tr>
-                            <th></th>
-                            <th style="background-color: red; color: white">U<br /><small>(Level 2)</small></th>
-                            <th style="background-color: orange; color: black">F<br /><small>(Level 3)</small></th>
-                            <th style="background-color: yellow; color: black">G<br /><small>(Level 4)</small></th>
-                            <th style="background-color: green; color: white">E<br /><small>(Level 5)</small></th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr>
-                            <td style="background-color: blue; color: white;"><strong>{{ item.name }}</strong></td>
-
-                            <!-- Unsatisfactory -->
-                            <td>
-                              <ul *ngIf="item.cts?.unsatisfactoryCriteria?.[formData.phase]?.length > 0; else noUnsat">
-                                <li *ngFor="let crit of item.cts.unsatisfactoryCriteria[formData.phase]">{{ crit }}</li>
-                              </ul>
-                              <ng-template #noUnsat><li>-: (No criteria)</li></ng-template>
-                            </td>
-
-                            <!-- Fair -->
-                            <td>
-                              <ul *ngIf="item.cts?.fairCriteria?.[formData.phase]?.length > 0; else noFair">
-                                <li *ngFor="let crit of item.cts.fairCriteria[formData.phase]">{{ crit }}</li>
-                              </ul>
-                              <ng-template #noFair><li>-: (No criteria)</li></ng-template>
-                            </td>
-
-                            <!-- Good -->
-                            <td>
-                              <ul *ngIf="item.cts?.goodCriteria?.[formData.phase]?.length > 0; else noGood">
-                                <li *ngFor="let crit of item.cts.goodCriteria[formData.phase]">{{ crit }}</li>
-                              </ul>
-                              <ng-template #noGood><li>-: (No criteria)</li></ng-template>
-                            </td>
-
-                            <!-- Excellent -->
-                            <td>
-                              <ul *ngIf="item.cts?.excellentCriteria?.[formData.phase]?.length > 0; else noExcellent">
-                                <li *ngFor="let crit of item.cts.excellentCriteria[formData.phase]">{{ crit }}</li>
-                              </ul>
-                              <ng-template #noExcellent><li>-: (No criteria)</li></ng-template>
-                            </td>
-                          </tr>
-                        </tbody>
-                      </table>
+                      <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"
+                      ></button>
                     </div>
-                  </div>
 
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <div class="modal-body">
+                      <!-- Phase Not Selected -->
+                      <div
+                        *ngIf="!formData.phase"
+                        class="alert alert-info text-center"
+                      >
+                        Please select a phase to view CTS criteria.
+                      </div>
+
+                      <!-- Phase Selected: Show CTS -->
+                      <div *ngIf="formData.phase">
+                        <h5 class="mb-3 text-primary text-uppercase">
+                          Showing CTS for: {{ formData.phase }}
+                        </h5>
+
+                        <table class="table table-bordered text-center">
+                          <thead>
+                            <tr>
+                              <th></th>
+                              <th style="background-color: red; color: white">
+                                U<br /><small>(Level 2)</small>
+                              </th>
+                              <th
+                                style="background-color: orange; color: black"
+                              >
+                                F<br /><small>(Level 3)</small>
+                              </th>
+                              <th
+                                style="background-color: yellow; color: black"
+                              >
+                                G<br /><small>(Level 4)</small>
+                              </th>
+                              <th style="background-color: green; color: white">
+                                E<br /><small>(Level 5)</small>
+                              </th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr>
+                              <td style="background-color: blue; color: white">
+                                <strong>{{ item.name }}</strong>
+                              </td>
+
+                              <!-- Unsatisfactory -->
+                              <td>
+                                <ul
+                                  *ngIf="item.cts?.unsatisfactoryCriteria?.[formData.phase]?.length > 0; else noUnsat"
+                                >
+                                  <li
+                                    *ngFor="
+                                      let crit of item.cts
+                                        .unsatisfactoryCriteria[formData.phase]
+                                    "
+                                  >
+                                    {{ crit }}
+                                  </li>
+                                </ul>
+                                <ng-template #noUnsat
+                                  ><li>-: (No criteria)</li></ng-template
+                                >
+                              </td>
+
+                              <!-- Fair -->
+                              <td>
+                                <ul
+                                  *ngIf="item.cts?.fairCriteria?.[formData.phase]?.length > 0; else noFair"
+                                >
+                                  <li
+                                    *ngFor="
+                                      let crit of item.cts.fairCriteria[
+                                        formData.phase
+                                      ]
+                                    "
+                                  >
+                                    {{ crit }}
+                                  </li>
+                                </ul>
+                                <ng-template #noFair
+                                  ><li>-: (No criteria)</li></ng-template
+                                >
+                              </td>
+
+                              <!-- Good -->
+                              <td>
+                                <ul
+                                  *ngIf="item.cts?.goodCriteria?.[formData.phase]?.length > 0; else noGood"
+                                >
+                                  <li
+                                    *ngFor="
+                                      let crit of item.cts.goodCriteria[
+                                        formData.phase
+                                      ]
+                                    "
+                                  >
+                                    {{ crit }}
+                                  </li>
+                                </ul>
+                                <ng-template #noGood
+                                  ><li>-: (No criteria)</li></ng-template
+                                >
+                              </td>
+
+                              <!-- Excellent -->
+                              <td>
+                                <ul
+                                  *ngIf="item.cts?.excellentCriteria?.[formData.phase]?.length > 0; else noExcellent"
+                                >
+                                  <li
+                                    *ngFor="
+                                      let crit of item.cts.excellentCriteria[
+                                        formData.phase
+                                      ]
+                                    "
+                                  >
+                                    {{ crit }}
+                                  </li>
+                                </ul>
+                                <ng-template #noExcellent
+                                  ><li>-: (No criteria)</li></ng-template
+                                >
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+
+                    <div class="modal-footer">
+                      <button
+                        type="button"
+                        class="btn btn-secondary"
+                        data-bs-dismiss="modal"
+                      >
+                        Close
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          </td>
-        </tr>
-      </tbody>
-
-    </table>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
-</div>
-
 
   <div class="right-panel">
     <!-- Green Section -->
@@ -343,7 +458,7 @@
         <div class="p-2 border border-dark">
           <div class="d-flex justify-content-between align-items-center mb-2">
             <button class="btn btn-primary" (click)="calculateOverallRating()">
-              <i class="bi bi-calculator me-1"></i> Calculate Overall Grade
+              <i class="bi bi-calculator me-1"></i> Calculate Overall Grade - Not work
             </button>
           </div>
           <div class="d-flex justify-content-center">
@@ -358,7 +473,7 @@
                 'text-secondary': overallGrade === 'NG',
               }"
             >
-              {{ overallGrade || "--" }}
+              {{ overallGrade || "" }}
             </div>
           </div>
         </div>
@@ -570,13 +685,5 @@
     Print PDF
   </button>
 
-  <button
-    class="btn action-button save-button"
-    (click)="saveGradesheet()"
-    type="button"
-  >
-    Save Gradesheet
-  </button>
+ 
 </div>
-
-

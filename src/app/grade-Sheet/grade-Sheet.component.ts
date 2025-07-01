@@ -57,6 +57,10 @@ export class GradeSheetComponent implements OnInit {
 
       // Fill form data
       const data = this.flightDomainGradeSheet;
+      console.log(
+        'flightDomainSyllabus received :',
+        this.flightDomainGradeSheet
+      );
       this.formData.mixDur = data.mixDur || '';
       this.formData.crewMember = data.crewMember || '';
       this.formData.student = data.student || '';
@@ -72,6 +76,7 @@ export class GradeSheetComponent implements OnInit {
 
     // Optional: handle update mode flag
     if (state?.isUpdate) {
+     
       console.log('Update mode enabled'); // ✅ You can also set a local `isUpdate` flag
       this.isUpdateMode = true; // define `isUpdateMode` as a class-level boolean if needed
     }

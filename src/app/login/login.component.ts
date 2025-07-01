@@ -34,7 +34,13 @@ export class LoginComponent {
       next: (response) => {
         // Handle successful login
         console.log('Login successful', response);
-        this.router.navigate(['dashboard']); // or wherever you want to redirect
+        const attemptedURL = localStorage.getItem('attemptedURL');
+        if (attemptedURL) {
+          this.router.navigateByUrl(attemptedURL);
+          localStorage.removeItem('attemptedURL'); // Clear the stored URL
+        } else {
+          this.router.navigate(['dashboard']); // Default redirect
+        }
       },
       error: (err) => {
         // Handle login error

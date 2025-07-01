@@ -102,14 +102,6 @@ export class AuthUserService {
               'access_Token Logged:',
               localStorage.getItem('access_Token')
             );
-
-            const attemptedURL = localStorage.getItem('attemptedURL');
-            if (attemptedURL) {
-              this.router.navigateByUrl(attemptedURL);
-              localStorage.removeItem('attemptedURL');
-            } else {
-              this.router.navigate(['']);
-            }
           } else {
             alert('Login failed');
           }
@@ -144,14 +136,6 @@ export class AuthUserService {
             localStorage.setItem('access_Token', res.access_Token);
 
             this.isUserLoggedIn.next(true);
-
-            const attemptedURL = localStorage.getItem('attemptedURL');
-            if (attemptedURL) {
-              this.router.navigateByUrl(attemptedURL);
-              localStorage.removeItem('attemptedURL');
-            } else {
-              this.router.navigate(['']);
-            }
           } else {
             this.toastrService.error('Registration failed.');
           }

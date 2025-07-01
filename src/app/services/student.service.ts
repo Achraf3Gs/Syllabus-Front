@@ -39,12 +39,16 @@ export class StudentService {
     );
   }
 
-  updateStudentPilot(studentPilot: Student): Observable<any> {
-    return this.http.put(
-      `${this.urlStudentPilots}/update/${studentPilot.instructor.id}/${studentPilot.id}`,
-      studentPilot
-    );
-  }
+ updateStudent(
+      myform: Student,
+      instructorId: number,
+      studentId: number
+    ): Observable<any> {
+      return this.http.put(
+        `${this.urlStudentPilots}/update/${instructorId}/${studentId}`,
+        myform
+      );
+    }
 
   deleteStudentPilot(id: any) {
     console.log(this.urlStudentPilots + '/' + id);

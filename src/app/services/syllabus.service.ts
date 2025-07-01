@@ -24,17 +24,16 @@ export class SyllabusService {
     return this.http.get(`${this.urlsyllabus}/title/${title}`);
   }
   updateSyllabus(
-    myform: Syllabus,
-    StudentId: number,
-    SyllabusId: number
-  ): Observable<any> {
-    return this.http.put(
-      `${this.urlsyllabus}/update/${StudentId}/${SyllabusId}`,
-      myform
-    );
-  }
+        syllabusId: number,
+        myform: { title: string }
+      ): Observable<any> {
+        return this.http.put(
+          `${this.urlsyllabus}/update/${ syllabusId}`,
+          myform
+        );
+      }
 
-  deleteManeuverItem(SyllabusId: number): Observable<any> {
+  deleteSyllabus(SyllabusId: number): Observable<any> {
     return this.http.delete(`${this.urlsyllabus}/delete/${SyllabusId}`);
   }
 }

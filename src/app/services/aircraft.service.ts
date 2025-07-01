@@ -20,7 +20,15 @@ export class AircraftService {
       return this.http.get<Aircraft[]>(this.urlAircrafts + '/list');
     }
 
-
+ updateAircraft(
+        aircraftId: number,
+        myform: Aircraft   
+      ): Observable<any> {
+        return this.http.put(
+          `${this.urlAircrafts}/update/${aircraftId}`,
+          myform
+        );
+      }
 
 
   GetAircraft(id: number) {

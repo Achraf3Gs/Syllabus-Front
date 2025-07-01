@@ -33,9 +33,21 @@ export class FlightDomainSyllabusService {
     );
   }
 
-  deleteFlightDoaminSyllabus(FlightDoaminSyllabusId: number): Observable<any> {
+    updateFlightDoaminSyllabus(
+      myform: FlightDoaminSyllabus,
+      syllabusId: number,
+      flightDomainSyllabusId: number
+    ): Observable<any> {
+      return this.http.put(
+        `${this.urlflightDomainSyllabus}/update/${syllabusId}/${flightDomainSyllabusId}`,
+        myform
+      );
+    }
+  deleteFlightDoaminSyllabus(
+    flightDomainSyllabusId: number
+  ): Observable<any> {
     return this.http.delete(
-      `${this.urlflightDomainSyllabus}/delete/${FlightDoaminSyllabusId}`
+      `${this.urlflightDomainSyllabus}/delete/${flightDomainSyllabusId}`
     );
   }
 

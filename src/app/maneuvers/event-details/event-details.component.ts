@@ -94,6 +94,7 @@ export class EventDetailsComponent implements OnInit {
     const maneuverData = {
       ...rest,
       cts: {
+        ...this.maneuverItem.cts, // Preserve all existing cts properties
         unsatisfactory: this.maneuverItem.cts?.unsatisfactory || [],
         fair: this.maneuverItem.cts?.fair || [],
         good: this.maneuverItem.cts?.good || [],
@@ -139,6 +140,7 @@ export class EventDetailsComponent implements OnInit {
     this.maneuverItem = {
       ...maneuverItem,
       cts: {
+        ...maneuverItem.cts, // Preserve existing properties
         unsatisfactory: this.stringToArray(maneuverItem.cts.unsatisfactory),
         fair: this.stringToArray(maneuverItem.cts.fair),
         good: this.stringToArray(maneuverItem.cts.good),
