@@ -9,6 +9,7 @@ import { faInfo, faBan, faFloppyDisk } from '@fortawesome/free-solid-svg-icons';
 import { HttpClient } from '@angular/common/http';
 import { FlightDomainService } from '../../services/flightDomain.service';
 import { ManeuverItemService } from '../../services/maneuver-item.service';
+import { FlightDomain } from '../../model/FlightDomain';
 import { NgFor } from '@angular/common';
 
 @Component({
@@ -27,20 +28,7 @@ export class PageManeuverComponent implements OnInit {
   faInfo = faInfo;
   faBan = faBan;
   faFloppyDisk = faFloppyDisk;
-  flightDomains: {
-    id: number;
-    name: string;
-    maneuverItems: {
-      id: number;
-      name: string;
-      cts: {
-        unsatisfactory: string[];
-        fair: string[];
-        good: string[];
-        excellent: string[];
-      };
-    }[];
-  }[] = [];
+  flightDomains: FlightDomain[] = [];
 
   ngOnInit() {
     this.flightDomainService.listFlightDomain().subscribe((response) => {

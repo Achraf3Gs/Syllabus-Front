@@ -1,105 +1,54 @@
-.syllabus-table {
-  overflow-x: auto;
-
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    text-align: center;
-    font-family: Arial, sans-serif;
-    border: 2px solid black; // Optional: bold outer border
-
-    th,
-    td {
-      border: 1px solid black; // changed from #999 to black
-      padding: 8px;
-      min-width: 60px;
-    }
-
-    th {
-      background-color: #cfe2f3;
-      font-weight: bold;
-    }
-
-    .basic-header {
-      background-color: #4acc61;
-    }
-
-    .advanced-header {
-      background-color: #f5f228;
-    }
-
-    .mif {
-      background-color: #ba74e6;
-    }
-
-    .maneuver {
-      background-color: #d9d2e9;
-      font-weight: bold;
-    }
-
-    .mif-cell {
-      background-color: #f9cb9c;
-      font-weight: bold;
-    }
-
-    .date {
-      background-color: #a1a9eb;
-    }
-
-    .grade {
-      background-color: #ece7f1;
-    }
-
-    .grade-F {
-      background-color: #f4cccc;
-    }
-
-    .grade-G {
-      background-color: #d9ead3;
-    }
-
-    .grade-E {
-      background-color: #c9daf8;
-    }
-
-    .grade-U {
-      background-color: #ea9999;
-    }
-
-    .grade-empty {
-      background-color: #eeeeee;
-    }
-
-    td.separator {
-      border-right: 3px dashed green;
-    }
-
-    thead tr:nth-child(2) th:nth-child(5),
-    thead tr:nth-child(3) th:nth-child(5) {
-      border-left: 3px dashed green;
-    }
-  }
-
-  .below-mif {
-    background-color: #db3a3a !important;
-    max-width: 10px;
-  }
-
-  .meets-mif {
-    background-color: #cad0d5 !important;
-  }
- .syllabus-wrapper {
+.container {
   width: 100%;
+  max-width: 100%;
+  padding: 20px;
+  margin: 0;
+}
+
+.section-title {
+  color: #2c3e50;
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 2rem 0 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid #e0e0e0;
+}
+
+.syllabus-section {
+  width: 100%;
+  margin: 0 0 2rem 0;
+  padding: 1.5rem;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-sizing: border-box;
+  
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  }
+}
+
+.syllabus-divider {
+  border: 0;
+  height: 1px;
+  background-color: #ccc;
+  margin-top: 2rem;
+}
+
+.loading-indicator,
+.error-message,
+.no-data-message {
   display: flex;
-  flex-direction: column;
+  justify-content: center;
   align-items: center;
+  padding: 2rem;
+  font-size: 1.2rem;
+  color: #666;
 }
 
-.syllabus-title {
-  text-align: center;
-  font-size: 24px;
-  font-weight: bold;
-  margin-bottom: 20px;
+.error-message {
+  color: #d9534f; // A standard error color
 }
 
-}

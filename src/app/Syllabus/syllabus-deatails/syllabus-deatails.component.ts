@@ -50,7 +50,12 @@ export class SyllabusDeatailsComponent {
   faTrash = faTrash;
 
   goToSyllabusDetails() {
-    this.router.navigate(['dashboard/syllabusdetaile']);
+    if (this.syllabus && this.syllabus.id) {
+      this.router.navigate(['dashboard', 'syllabusdetaile', this.syllabus.id]);
+    } else {
+      console.error('Cannot navigate: syllabus or syllabus.id is undefined');
+      this.router.navigate(['dashboard/syllabusdetaile']);
+    }
   }
 
   goToNewFlightDomainSyllabus() {

@@ -1,76 +1,114 @@
-import { BusyService } from './busy.service';
-import { Injectable } from '@angular/core';
-import {
-  HttpRequest,
-  HttpHandler,
-  HttpEvent,
-  HttpInterceptor,
-  HttpErrorResponse,
-} from '@angular/common/http';
-import { catchError, throwError, Observable, finalize } from 'rxjs';
-
+import { inject } from '@angular/core';
+import { HttpInterceptorFn, HttpErrorResponse, HttpEvent, HttpEventType } from '@angular/common/http';
+import { catchError, throwError, finalize, tap } from 'rxjs';
 import { Router } from '@angular/router';
+import { BusyService } from './busy.service';
 import { AuthUserService } from './authuser.service';
 import { environment } from '../environments/environment';
 
-@Injectable()
-export class AuthInterceptor implements HttpInterceptor {
-  private secret = environment.secret;
-  private client = environment.client;
+export const authInterceptor: HttpInterceptorFn = (req, next) => {
+  const busyService = inject(BusyService);
+  const authUserService = inject(AuthUserService);
+  const router = inject(Router);
 
-  constructor(
-    private busyService: BusyService,
-    private authUserService: AuthUserService,
-    private router: Router
-  ) {}
+  // Skip auth for auth endpoints
+  if (
+    req.url.includes('/api/v1/auth/authenticate') ||
+    req.url.includes('/api/v1/auth/register') ||
+    req.url.includes('/api/v1/auth/logout')
+  ) {
+    return next(req);
+  }
 
-  intercept(
-    request: HttpRequest<unknown>,
-    next: HttpHandler
-  ): Observable<HttpEvent<any>> {
-    if (
-      request.url.includes('/api/v1/auth/authenticate') ||
-      request.url.includes('/api/v1/auth/register') ||
-      request.url.includes('/api/v1/auth/logout')
-    ) {
-      return next.handle(request);
-    }
+  busyService.busy();
 
-    this.busyService.busy();
+  const token = authUserService.getAccess_TokenFromLocalStorage();
+  console.log('Auth Interceptor - Token:', token ? 'Present' : 'Missing');
 
-    if (this.authUserService.UserLoggedIn()) {
-      request = this.addAuthHeaders(request);
-    }
+  // Log the original request
+  console.log('Original Request:', {
+    url: req.url,
+    method: req.method,
+    headers: req.headers.keys().reduce((acc, key) => ({
+      ...acc,
+      [key]: req.headers.get(key)
+    }), {})
+  });
 
-    return next.handle(request).pipe(
-      finalize(() => this.busyService.idle()),
-      catchError((error: HttpErrorResponse) => {
-        if (error.status === 401 || error.status === 403) {
-          // Save the URL the user was trying to access.
-          localStorage.setItem('attemptedURL', this.router.url);
+  let authReq = req;
 
-          // Perform a client-side-only logout to avoid an infinite loop.
-          // The regular logout() method makes an HTTP call which would also fail.
-          localStorage.removeItem('access_Token');
-          this.router.navigate(['/login']);
+  // Clone the request and add auth headers
+  if (token) {
+    authReq = req.clone({
+      setHeaders: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      params: req.params
+        .set('secret', environment.secret)
+        .set('client', environment.client),
+    });
+  }
+
+  // Log the modified request
+  console.log('Modified Request:', {
+    url: authReq.url,
+    method: authReq.method,
+    headers: authReq.headers.keys().reduce((acc, key) => ({
+      ...acc,
+      [key]: authReq.headers.get(key)
+    }), {}),
+    params: Array.from(authReq.params.keys()).reduce((acc, key) => ({
+      ...acc,
+      [key]: authReq.params.get(key)
+    }), {})
+  });
+
+  return next(authReq).pipe(
+    tap({
+      next: (event: HttpEvent<any>) => {
+        if (event.type === HttpEventType.Response) {
+          console.log('Response:', {
+            status: event.status,
+            statusText: event.statusText,
+            url: event.url || '',
+            headers: event.headers.keys().reduce((acc: any, key) => ({
+              ...acc,
+              [key]: event.headers.getAll(key)
+            }), {})
+          });
         }
-        return throwError(() => error);
-      })
-    );
-  }
-
-  private addAuthHeaders(request: HttpRequest<any>): HttpRequest<any> {
-    const token = this.authUserService.getAccess_TokenFromLocalStorage();
-    if (token) {
-      return request.clone({
-        setHeaders: {
-          Authorization: `Bearer ${token}`,
-        },
-        params: request.params
-          .set('secret', this.secret)
-          .set('client', this.client),
+      },
+      error: (error: any) => {
+        console.error('Error in response:', error);
+      }
+    }),
+    finalize(() => {
+      console.log('Request completed');
+      busyService.idle();
+    }),
+    catchError((error: HttpErrorResponse) => {
+      console.error('Interceptor - Error Details:', {
+        status: error.status,
+        statusText: error.statusText,
+        url: error.url,
+        headers: error.headers,
+        error: error.error,
+        message: error.message,
+        name: error.name
       });
-    }
-    return request;
-  }
-}
+
+      if (error.status === 401) {
+        console.warn('Authentication required - redirecting to login');
+        localStorage.removeItem('access_Token');
+        router.navigate(['/login']);
+      } else if (error.status === 403) {
+        console.error('Access Forbidden - Insufficient permissions');
+        // You could add a notification service call here to show an error to the user
+      }
+      
+      return throwError(() => error);
+    })
+  );
+};

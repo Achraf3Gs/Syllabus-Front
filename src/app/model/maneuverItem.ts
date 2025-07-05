@@ -4,7 +4,7 @@ export type ManeuverItem = {
   id: number;
   name: string;
   mifRequirement?: string;
-  cts: {
+  cts?: {
     unsatisfactoryCriteria: Record<string, string[]>;
     fairCriteria: Record<string, string[]>;
     goodCriteria: Record<string, string[]>;
@@ -12,5 +12,5 @@ export type ManeuverItem = {
     noGradeCriteria: Record<string, string[]>;
   };
 
-  flightDomain: FlightDomain;
+  flightDomain?: FlightDomain;
 };

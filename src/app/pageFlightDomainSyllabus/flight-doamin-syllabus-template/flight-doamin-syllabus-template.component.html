@@ -1,44 +1,62 @@
 <div class="syllabus-wrapper">
-  <h2 class="syllabus-title text-center mt-3">Student 25A's Syllabus</h2>
-  <div class="syllabus-table p-5">
+  <!-- Title -->
+  <h2 class="syllabus-title text-center mt-3">{{ syllabusTitle }}</h2>
+
+  <!-- Loading Indicator -->
+  <div *ngIf="isLoading" class="text-center p-5">
+    <p>Loading syllabus data...</p>
+  </div>
+
+  <!-- Error Message -->
+  <div *ngIf="errorMessage" class="alert alert-danger mx-5">
+    {{ errorMessage }}
+  </div>
+
+  <!-- Main Table -->
+  <div *ngIf="!isLoading && !errorMessage" class="syllabus-table p-5">
     <table>
       <thead>
+        <!-- Row 1: Block Numbers -->
         <tr>
-          <th rowspan="3">Maneuvers</th>
-          <th colspan="4" class="basic-header">Basic</th>
-          <th colspan="4" class="advanced-header">Advanced</th>
-          <th rowspan="3" class="mif">MIF</th>
+          <th rowspan="3" class="maneuver-header">Maneuvers</th>
+          <th *ngFor="let block of processedBlocks" 
+              [attr.colspan]="block.gradeSheets.length * 2" 
+              class="block-header" 
+              [style.backgroundColor]="block.color">
+            Block {{ block.blockNumber }}
+          </th>
         </tr>
+        <!-- Row 2: GradeSheet Names -->
         <tr>
-          <ng-container *ngFor="let column of missionColumns">
-            <th class="date">{{ column.date }}</th>
-          </ng-container>
+          <th *ngFor="let gs of allGradeSheetsInOrder" colspan="2" class="gradesheet-header">
+            {{ gs.name }}
+          </th>
         </tr>
+        <!-- Row 3: Sub-headers (Rating, MIF) -->
         <tr>
-          <ng-container *ngFor="let column of missionColumns">
-            <th class="grade">{{ column.overallGrade }}</th>
+          <ng-container *ngFor="let gs of allGradeSheetsInOrder">
+            <th class="sub-header">Rating</th>
+            <th class="sub-header">MIF</th>
           </ng-container>
         </tr>
       </thead>
-
       <tbody>
-        <tr *ngFor="let maneuver of maneuvers">
-        <td class="maneuver">{{ maneuver.name }}</td>
-        <td
-          *ngFor="let grade of maneuver.grades; let i = index"
-          [ngClass]="{
-            'below-mif': getGradeLevel(grade) < extractMifLevel(maneuver.mif),
-            'meets-mif': getGradeLevel(grade) >= extractMifLevel(maneuver.mif)
-          }"
-        >
-          {{ grade }}
-        </td>
-        <td class="mif-cell">{{ maneuver.mif }}</td>
-      </tr>
+        <!-- Maneuver Rows -->
+        <tr *ngFor="let maneuver of processedManeuvers">
+          <!-- Maneuver Name -->
+          <td class="maneuver-name">{{ maneuver.maneuverName }}</td>
+          <!-- Grades for each GradeSheet -->
+          <ng-container *ngFor="let grade of maneuver.grades">
+            <td class="rating-cell" [class.not-applicable]="!grade.isPresent" [class.no-mif]="!grade.mif">
+              <span *ngIf="grade.isPresent && grade.rating">{{ grade.rating }}</span>
+              <span *ngIf="grade.isPresent && !grade.rating" class="rating-default">0</span>
+            </td>
+            <td class="mif-cell" [class.not-applicable]="!grade.isPresent" [class.no-mif]="!grade.mif">
+              <span *ngIf="grade.isPresent && grade.mif">{{ grade.mif }}</span>
+            </td>
+          </ng-container>
+        </tr>
       </tbody>
     </table>
   </div>
-  </div>
-
-
-
+</div>

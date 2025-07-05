@@ -72,6 +72,7 @@ export class GradeSheetComponent implements OnInit {
       this.formData.sortieNbr = data.sortieNbr || '';
       this.formData.phase = data.phase || '';
       this.formData.name = data.name || '';
+      this.formData.block = data.block || '';
     }
 
     // Optional: handle update mode flag
@@ -150,6 +151,7 @@ export class GradeSheetComponent implements OnInit {
     phase: '',
     ///GrageSheet-Name///
     name: '',
+    block: '',
   };
 
   onCrewMemberChange(event: any) {

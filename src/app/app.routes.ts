@@ -132,8 +132,13 @@ export const routes: Routes = [
       },
 
       {
-        path: 'syllabusdetaile',
+        path: 'syllabusdetaile/:id',
         component: ESyllabusDetaileComponent,
+      },
+      {
+        path: 'syllabusdetaile',
+        redirectTo: 'syllabusdetaile/',
+        pathMatch: 'full'
       },
       {
         path: 'user',
@@ -169,6 +174,10 @@ export const routes: Routes = [
         component: FlightDomainSyllabusComponent,
       },
       {
+        path: 'flightDoaminSyllabusTemplate/:id',
+        component: FlightDoaminSyllabusTemplateComponent,
+      },
+      {
         path: 'newflightDomainSyllabus',
         component: NewFlightDoaminSyllabusComponent,
       },
@@ -181,7 +190,7 @@ export const routes: Routes = [
         component: NewSyllabusComponent,
       },
       {
-        path: 'flightDoaminSyllabusTemplateComponent',
+        path: 'flightDoaminSyllabusTemplateComponent/:id',
         component: FlightDoaminSyllabusTemplateComponent,
       },
     ],

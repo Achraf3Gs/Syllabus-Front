@@ -1,89 +1,98 @@
-import { Component, Pipe, PipeTransform } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
-@Pipe({ name: 'gradeClass', standalone: true })
-export class GradeClassPipe implements PipeTransform {
-  transform(value: string): string {
-    if (!value) return 'grade-empty';
-    return 'grade-' + value.toUpperCase();
-  }
-}
+import { ActivatedRoute, Router } from '@angular/router';
+import { FlightDomainSyllabusService } from '../../services/flight-domain-syllabus.service';
+import { FlightDoaminSyllabus } from '../../model/FlightDoaminSyllabus';
 
 @Component({
   selector: 'app-e-syllabus-detaile',
   standalone: true,
-  imports: [CommonModule, GradeClassPipe],
+  imports: [CommonModule],
   templateUrl: './e-syllabus-detaile.component.html',
-  styleUrl: './e-syllabus-detaile.component.scss',
+  styleUrls: ['./e-syllabus-detaile.component.scss'],
 })
-export class ESyllabusDetaileComponent {
-  overallGrade: string = '-------';
+export class ESyllabusDetaileComponent implements OnInit {
+  flightDomainSyllabuses: FlightDoaminSyllabus[] = [];
+  isLoading = true;
+  errorMessage: string | null = null;
 
-  missionColumns = [
-    { date: '11/02', overallGrade: 'G' }, // basic
-    { date: '12/02', overallGrade: 'F' },
-    { date: '13/02', overallGrade: 'E' },
-    { date: '14/02', overallGrade: 'G' },
-    { date: '15/02', overallGrade: 'G' }, // advanced
-    { date: '16/02', overallGrade: 'E' },
-    { date: '17/02', overallGrade: 'G' },
-    { date: '18/02', overallGrade: 'F' },
-  ];
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+    private flightDomainSyllabusService: FlightDomainSyllabusService
+  ) {}
 
-  maneuvers = [
-    {
-      name: 'Mission preparation',
-      grades: ['F', 'F', 'E', 'G', 'F', 'F', 'E', 'G'],
-      mif: '3+ (F)',
-    },
-    {
-      name: 'Ground operations',
-      grades: ['G', 'F', 'G', 'G', 'F', 'F', 'E', 'G'],
-      mif: '4+ (G)',
-    },
-    {
-      name: 'Take off',
-      grades: ['G', 'E', 'E', 'G', 'F', 'F', 'E', 'G'],
-      mif: '4+ (G)',
-    },
-    {
-      name: 'Departure',
-      grades: ['F', 'G', 'E', 'E', 'F', 'F', 'E', 'G'],
-      mif: '4+ (G)',
-    },
-    {
-      name: 'Basic Aircraft Control',
-      grades: ['G', 'G', 'E', 'G', 'F', 'F', 'E', 'G'],
-      mif: '4+ (G)',
-    },
-    {
-      name: 'Straight Level Flight',
-      grades: ['G', 'U', 'F', 'F', 'F', 'F', 'E', 'G'],
-      mif: '3+ (F)',
-    },
-    {
-      name: 'Spin',
-      grades: ['F', 'F', 'E', 'G', 'F', 'F', 'E', 'G'],
-      mif: '2 (U)',
-    },
-  ];
-
-  getGradeLevel(letter: string): number {
-    switch (letter) {
-      case 'U':
-        return 2;
-      case 'F':
-        return 3;
-      case 'G':
-        return 4;
-      case 'E':
-        return 5;
-      default:
-        return 0; // For unknown or empty values
-    }
+  ngOnInit(): void {
+    // Use paramMap to get the syllabus ID from the route
+    this.route.paramMap.subscribe(params => {
+      const syllabusId = params.get('id');
+      if (syllabusId) {
+        console.log('Loading flight domain syllabi for syllabus ID:', syllabusId);
+        this.loadFlightDomainSyllabuses(+syllabusId);
+      } else {
+        this.isLoading = false;
+        this.errorMessage = 'No syllabus ID provided';
+        console.error('No syllabus ID provided in the route');
+      }
+    });
   }
-  extractMifLevel(mif: string): number {
-    const match = mif.match(/^(\d+)/); // Get the numeric part at the start
-    return match ? +match[1] : 0;
+
+  // Navigate to the syllabus template
+  viewSyllabusTemplate(syllabusId: number): void {
+    this.router.navigate(['dashboard', 'flightDoaminSyllabusTemplate', syllabusId]);
+  }
+
+  // TrackBy function to optimize ngFor performance
+  trackBySyllabusId(index: number, syllabus: any): number {
+    return syllabus.id;
+  }
+
+  loadFlightDomainSyllabuses(syllabusId: number) {
+    this.isLoading = true;
+    this.errorMessage = null;
+    this.flightDomainSyllabuses = [];
+
+    this.flightDomainSyllabusService
+      .listSyllabusFlightDoaminSyllabus(syllabusId)
+      .subscribe({
+        next: (data: any) => {
+          if (!Array.isArray(data)) {
+            console.error('Expected an array of flight domain syllabuses but got:', data);
+            this.errorMessage = 'Invalid data format received from server';
+            return;
+          }
+
+          // Process and filter unique flight domain syllabuses by name and block
+          const uniqueSyllabuses = new Map<string, any>();
+          
+          data.forEach(item => {
+            if (!item || !item.name) return;
+            
+            const key = `${item.name}_${item.block || 1}`;
+            
+            // Use the composite key to ensure uniqueness
+            if (!uniqueSyllabuses.has(key)) {
+              uniqueSyllabuses.set(key, {
+                id: item.id,
+                name: item.name,
+                block: item.block || 1, // Default to block 1 if not specified
+                flightDomain: item.flightDomain
+              });
+            }
+          });
+
+          this.flightDomainSyllabuses = Array.from(uniqueSyllabuses.values());
+          console.log('Processed flight domain syllabuses:', this.flightDomainSyllabuses);
+        },
+        error: (error) => {
+          console.error('Error loading flight domain syllabi:', error);
+          this.errorMessage = 'Failed to load flight domain syllabi. Please try again later.';
+          this.isLoading = false;
+        },
+        complete: () => {
+          this.isLoading = false;
+          console.log('Flight domain syllabi loading completed');
+        }
+      });
   }
 }

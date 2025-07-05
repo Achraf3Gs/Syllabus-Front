@@ -51,7 +51,11 @@ export class FlightDomainSyllabusdetailsComponent implements OnInit {
   }
 
   goToSyllabusDetails() {
-    this.router.navigate(['dashboard/flightDoaminSyllabusTemplateComponent']);
+    if (this.flightDoaminSyllabus && this.flightDoaminSyllabus.id) {
+      this.router.navigate(['dashboard/flightDoaminSyllabusTemplateComponent', this.flightDoaminSyllabus.id]);
+    } else {
+      console.error('Syllabus ID is missing, cannot navigate to details.');
+    }
   }
 
   goToNewFlightDomainGradeSheet() {

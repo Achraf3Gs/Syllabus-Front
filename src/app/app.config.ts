@@ -4,17 +4,16 @@ import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
 import { provideClientHydration } from '@angular/platform-browser';
 import {
-  HTTP_INTERCEPTORS,
   provideHttpClient,
   withFetch,
-  withInterceptorsFromDi,
+  withInterceptors,
 } from '@angular/common/http';
 import {
   BrowserAnimationsModule,
   provideAnimations,
 } from '@angular/platform-browser/animations';
 import { provideToastr } from 'ngx-toastr';
-import { AuthInterceptor } from './services/auth.interceptor';
+import { authInterceptor } from './services/auth.interceptor';
 import { JwtModule } from '@auth0/angular-jwt';
 
 export function tokenGetter() {
@@ -22,7 +21,7 @@ export function tokenGetter() {
 }
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideHttpClient(withInterceptorsFromDi(), withFetch()),
+    provideHttpClient(withInterceptors([authInterceptor]), withFetch()),
     provideRouter(routes),
     provideClientHydration(),
     provideAnimations(), // required animations providers
@@ -38,10 +37,5 @@ export const appConfig: ApplicationConfig = {
         },
       })
     ),
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: AuthInterceptor,
-      multi: true,
-    },
   ],
 };

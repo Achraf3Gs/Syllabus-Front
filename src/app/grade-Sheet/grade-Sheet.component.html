@@ -10,7 +10,7 @@
               class="text-center"
               style="font-size: 24px; font-weight: bold"
             >
-              {{ formData.name }}
+              {{ formData.name }} <span *ngIf="formData.block">- Block: {{ formData.block }}</span>
             </th>
           </tr>
           <tr>

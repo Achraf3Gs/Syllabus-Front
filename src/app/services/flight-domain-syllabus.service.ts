@@ -19,8 +19,8 @@ export class FlightDomainSyllabusService {
     );
   }
 
-  GetFlightDoaminSyllabus(id: number) {
-    return this.http.get(`${this.urlflightDomainSyllabus}/${id}`);
+  GetFlightDoaminSyllabus(id: number): Observable<FlightDoaminSyllabus> {
+    return this.http.get<FlightDoaminSyllabus>(`${this.urlflightDomainSyllabus}/${id}`);
   }
 
   createFlightDoaminSyllabus(
