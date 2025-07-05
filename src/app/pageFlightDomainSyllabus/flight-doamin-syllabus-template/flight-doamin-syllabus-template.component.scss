@@ -22,15 +22,36 @@
 
   table {
     width: 100%;
-    border-collapse: collapse;
+    border-collapse: separate;
+    border-spacing: 0;
     text-align: center;
     font-family: Arial, sans-serif;
+    border: 2px solid #000000;
+    border-radius: 8px;
+    overflow: hidden;
 
     th,
     td {
-      border: 1px solid #000;
+      border: 1px solid #000000;
       padding: 12px;
       vertical-align: middle;
+      position: relative;
+      
+      /* Add border between cells */
+      & + th,
+      & + td {
+        border-left: none;
+      }
+      
+      /* Add border between rows */
+      tr:not(:last-child) & {
+        border-bottom: 1px solid #dee2e6;
+      }
+    }
+    
+    /* Remove extra borders from thead */
+    thead th {
+      border-bottom: 2px solid #000000;
     }
 
     /* Hover and interactive effects */
@@ -65,7 +86,69 @@
     }
 
     .gradesheet-header {
-      background-color: #d6eaf8;
+      text-align: center;
+      vertical-align: middle;
+      padding: 12px 8px;
+      border: 1px solid #000000;
+      border-right: 2px solid #000000; /* Bold right border for grade sheet separation */
+      background-color: #f8f9fa;
+      font-weight: 600;
+      position: relative;
+      
+      /* Add a subtle shadow and border to the header content */
+      &::after {
+        content: '';
+        position: absolute;
+        top: 8px;
+        left: 8px;
+        right: 8px;
+        bottom: 8px;
+        border: 1px solid #e2e8f0;
+        border-radius: 4px;
+        pointer-events: none;
+      }
+      
+      .gradesheet-name {
+        margin-bottom: 8px;
+        font-size: 0.9em;
+        font-weight: 600;
+        padding: 4px 0;
+        position: relative;
+        z-index: 1;
+      }
+      
+      .overall-rating-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        margin: 6px 4px 0;
+        padding: 6px 8px;
+        background-color: #f1f8ff;
+        border: 1px solid #b3d7ff;
+        border-radius: 4px;
+        position: relative;
+        z-index: 1;
+        
+        .overall-label {
+          font-size: 0.8em;
+          color: #495057;
+          font-weight: 500;
+        }
+        
+        .overall-rating {
+          font-size: 1em;
+          font-weight: bold;
+          color: #0d6efd;
+          min-width: 24px;
+          text-align: center;
+          
+          &.no-rating {
+            color: #6c757d;
+            font-style: italic;
+          }
+        }
+      }
     }
 
     .sub-header {
@@ -74,70 +157,7 @@
       font-weight: normal;
     }
 
-    /* Grade Sheet Header with Overall Rating */
-    .gradesheet-header {
-      padding: 8px 4px;
-      text-align: center;
-      vertical-align: top;
-      position: relative;
-      
-      .gradesheet-name {
-        font-weight: 600;
-        margin-bottom: 4px;
-        font-size: 0.95rem;
-        line-height: 1.2;
-      }
-      
-      .overall-rating {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 8px;
-        margin-top: 4px;
-        padding: 4px 0;
-        
-        .rating-label {
-          color: #000;
-          font-weight: 500;
-          font-size: 0.85rem;
-          white-space: nowrap;
-        }
-        
-        .rating-value-container {
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
-          min-width: 28px;
-          height: 28px;
-          
-          .rating-value {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            min-width: 28px;
-            height: 100%;
-            background-color: #f1f8ff;
-            border: 1px solid #dee2e6;
-            border-radius: 4px;
-            font-weight: 600;
-            color: #0d6efd;
-            padding: 0 4px;
-          }
-          
-          .empty {
-            color: #9e9e9e;
-          }
-          
-          &.no-mif {
-            .rating-value, .empty {
-              background: none;
-              border: none;
-              color: #9e9e9e;
-            }
-          }
-        }
-      }
-    }
+
 
     /* Cell styles */
     .rating-cell,
@@ -197,6 +217,27 @@
       }
     }
 
+    /* Overall Rating Row */
+    .overall-rating-row {
+      background-color: #f8f9fa;
+      font-weight: bold;
+      
+      .maneuver-name {
+        font-weight: bold;
+        background-color: #e9ecef;
+      }
+      
+      .overall-cell {
+        background-color: #e9ecef;
+        font-size: 1.05em;
+        
+        &:not(.mif-cell) {
+          font-weight: bold;
+          color: #0d6efd;
+        }
+      }
+    }
+
     /* Body cell styling */
     .maneuver-name {
       background-color: #fdfefe;
@@ -208,12 +249,22 @@
       width: 80px;
       min-width: 80px;
       max-width: 80px;
+      
+      /* Add bold right border to every second cell (the MIF cell) */
+      &:nth-child(2n) {
+        border-right: 2px solid #000000;
+      }
     }
 
     /* Style for cells where the maneuver is not present in the gradesheet */
     .not-present {
       background-color: #e9ecef; /* Gray background */
       color: #adb5bd; /* Lighter text color */
+    }
+    
+    /* Add bold border to the first cell of each grade sheet group */
+    .maneuver-header {
+      border-right: 2px solid #000000;
     }
 
     .no-mif {
@@ -230,5 +281,14 @@
       border-radius: 3px;
     }
 
+    .rating-value {
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      width: 24px;
+      height: 24px;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+    }
   }
 }

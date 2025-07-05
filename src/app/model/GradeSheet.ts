@@ -12,4 +12,5 @@ export interface GradeSheet {
   flightDomainSyllabusId: number;
   maneuverItems: GradeSheetManeuver[];
   gradeSheetManeuverItems?: GradeSheetManeuver[];
+  overallRating?: number | null;
 };

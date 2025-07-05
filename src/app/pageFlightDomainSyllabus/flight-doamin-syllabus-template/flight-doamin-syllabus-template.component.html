@@ -26,10 +26,16 @@
             Block {{ block.blockNumber }}
           </th>
         </tr>
-        <!-- Row 2: GradeSheet Names -->
+        <!-- Row 2: GradeSheet Names with Overall Rating -->
         <tr>
           <th *ngFor="let gs of allGradeSheetsInOrder" colspan="2" class="gradesheet-header">
-            {{ gs.name }}
+            <div class="gradesheet-name">{{ gs.name }}</div>
+            <div class="overall-rating-container">
+              <span class="overall-label">Overall:</span>
+              <span class="overall-rating" [class.no-rating]="!gs.overallRating">
+                {{ gs.overallRating || '--' }}
+              </span>
+            </div>
           </th>
         </tr>
         <!-- Row 3: Sub-headers (Rating, MIF) -->
@@ -56,6 +62,8 @@
             </td>
           </ng-container>
         </tr>
+        
+
       </tbody>
     </table>
   </div>

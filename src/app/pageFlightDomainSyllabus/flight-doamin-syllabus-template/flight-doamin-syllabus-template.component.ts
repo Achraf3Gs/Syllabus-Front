@@ -56,6 +56,8 @@ export class FlightDoaminSyllabusTemplateComponent implements OnChanges {
     console.log('Component constructor called');
   }
 
+
+
   ngOnInit() {
     console.log('Component initialized');
     this.route.paramMap.subscribe(params => {
