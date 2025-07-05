@@ -36,8 +36,8 @@ interface ProcessedBlock {
   templateUrl: './flight-doamin-syllabus-template.component.html',
   styleUrls: ['./flight-doamin-syllabus-template.component.scss'],
 })
-export class FlightDoaminSyllabusTemplateComponent implements OnChanges {
-  flightDomainSyllabusId!: number;
+export class FlightDoaminSyllabusTemplateComponent implements OnChanges, OnInit {
+  @Input() flightDomainSyllabusId!: number;
   
   isLoading = true;
   errorMessage: string | null = null;
@@ -56,38 +56,26 @@ export class FlightDoaminSyllabusTemplateComponent implements OnChanges {
     console.log('Component constructor called');
   }
 
-
-
-  ngOnInit() {
-    console.log('Component initialized');
-    this.route.paramMap.subscribe(params => {
-      const id = params.get('id');
-      if (id) {
-        this.flightDomainSyllabusId = +id;
-        console.log('Loaded flightDomainSyllabusId from route:', this.flightDomainSyllabusId);
-        this.loadSyllabusData();
-      } else {
-        console.error('No ID found in route parameters');
-        this.errorMessage = 'No syllabus ID provided in URL';
-        this.isLoading = false;
-      }
-    });
+  ngOnInit(): void {
+    if (this.flightDomainSyllabusId) {
+      this.loadSyllabus();
+    } else {
+      this.route.paramMap.subscribe(params => {
+        const id = params.get('id');
+        if (id) {
+          this.flightDomainSyllabusId = +id;
+          this.loadSyllabus();
+        } else {
+          this.isLoading = false;
+          this.errorMessage = 'No flight domain syllabus ID provided';
+        }
+      });
+    }
   }
 
-  // ngOnChanges not needed anymore since we're using route params
-  // Keeping it for now in case it's used elsewhere
   ngOnChanges(changes: SimpleChanges): void {
-    console.log('Input changed:', changes);
-    if (changes['flightDomainSyllabusId']) {
-      if (changes['flightDomainSyllabusId'].currentValue) {
-        console.log('Input changed - Loading syllabus with ID:', changes['flightDomainSyllabusId'].currentValue);
-        this.loadSyllabusData();
-      } else {
-        const errorMsg = 'flightDomainSyllabusId changed to null or undefined';
-        console.error(errorMsg);
-        this.errorMessage = errorMsg;
-        this.isLoading = false;
-      }
+    if (changes['flightDomainSyllabusId'] && !changes['flightDomainSyllabusId'].firstChange) {
+      this.loadSyllabus();
     }
   }
 
@@ -99,7 +87,7 @@ export class FlightDoaminSyllabusTemplateComponent implements OnChanges {
     this.allGradeSheetsInOrder = [];
   }
 
-  loadSyllabusData(): void {
+  loadSyllabus(): void {
     console.log('=== Starting to load syllabus data ===');
     console.log('Using syllabus ID:', this.flightDomainSyllabusId);
     

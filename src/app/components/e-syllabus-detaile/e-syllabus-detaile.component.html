@@ -7,21 +7,18 @@
     <p>{{ errorMessage }}</p>
   </div>
 
-  <div *ngIf="!isLoading && !errorMessage">
+  <div *ngIf="!isLoading && !errorMessage" class="syllabus-container">
     <div *ngIf="flightDomainSyllabuses.length > 0; else noSyllabuses">
-      <!-- Dynamic Sections -->
-      <ng-container *ngFor="let syllabus of flightDomainSyllabuses; trackBy: trackBySyllabusId">
-        <div *ngIf="syllabus.name" class="syllabus-section">
-          <h2 class="section-title">{{ syllabus.name }}</h2>
-          <!-- Button to view the syllabus template -->
-          <button 
-            *ngIf="syllabus.id"
-            (click)="viewSyllabusTemplate(syllabus.id)"
-            class="btn btn-primary">
-            View Syllabus Template
-          </button>
+      <!-- Iterate through each flight domain syllabus -->
+      <div *ngFor="let syllabus of flightDomainSyllabuses; trackBy: trackBySyllabusId" class="syllabus-section">
+        <h2 class="section-title">{{ syllabus.name }}</h2>
+        <!-- Include the syllabus template component -->
+        <div *ngIf="syllabus.id" class="syllabus-content">
+          <app-flight-doamin-syllabus-template 
+            [flightDomainSyllabusId]="syllabus.id">
+          </app-flight-doamin-syllabus-template>
         </div>
-      </ng-container>
+      </div>
     </div>
     
     <ng-template #noSyllabuses>

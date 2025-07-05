@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FlightDomainSyllabusService } from '../../services/flight-domain-syllabus.service';
 import { FlightDoaminSyllabus } from '../../model/FlightDoaminSyllabus';
+import { FlightDoaminSyllabusTemplateComponent } from '../../pageFlightDomainSyllabus/flight-doamin-syllabus-template/flight-doamin-syllabus-template.component';
 
 @Component({
   selector: 'app-e-syllabus-detaile',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FlightDoaminSyllabusTemplateComponent],
   templateUrl: './e-syllabus-detaile.component.html',
   styleUrls: ['./e-syllabus-detaile.component.scss'],
 })
@@ -37,15 +38,11 @@ export class ESyllabusDetaileComponent implements OnInit {
     });
   }
 
-  // Navigate to the syllabus template
-  viewSyllabusTemplate(syllabusId: number): void {
-    this.router.navigate(['dashboard', 'flightDoaminSyllabusTemplate', syllabusId]);
-  }
-
   // TrackBy function to optimize ngFor performance
   trackBySyllabusId(index: number, syllabus: any): number {
     return syllabus.id;
   }
+  
 
   loadFlightDomainSyllabuses(syllabusId: number) {
     this.isLoading = true;
