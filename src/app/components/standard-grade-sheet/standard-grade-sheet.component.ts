@@ -230,114 +230,175 @@ export class StandardGradeSheetComponent {
   overallGrade: String = '-------';
 
   //  calculateOverallRating to handle Us (Safety Unsatisfactory)
-  calculateOverallRating(): void {
-    console.log('=== CALCULATING OVERALL RATING ===');
-    console.log('hasSafetyRemark flag:', this.hasSafetyRemark);
+ // ---------------------
 
-    if (this.selectedFlightDomains.length === 0) {
-      console.log('No selected maneuvers');
-      this.overallGrade = '-------';
-      return;
+// ----------------------
+// ✅ Improved calculateOverallRating()
+// ----------------------
+
+calculateOverallRating(): void {
+  console.log('=== STARTING RATING CALCULATION ===');
+
+  if (!this.selectedFlightDomains || this.selectedFlightDomains.length === 0) {
+    console.log('No maneuvers selected');
+    this.overallGrade = '-------';
+    return;
+  }
+
+  if (this.hasSafetyRemark) {
+    console.log('Safety mark found, setting overall grade to U');
+    this.overallGrade = 'U';
+    return;
+  }
+
+  const allItems = this.selectedFlightDomains.flatMap(
+    (m) => m.maneuverItems ?? []
+  );
+  const totalItems = allItems.length;
+  console.log('Total items:', totalItems);
+
+  if (totalItems === 0) {
+    console.log('No items found in selected maneuvers');
+    this.overallGrade = '-------';
+    return;
+  }
+
+  const ratingWeights: Record<Rating, number> = {
+    'E': 5, 'G': 4, 'F': 3, 'U': 2, 'NG': 1
+  };
+
+  const ratingCount: Record<Rating, number> = { G: 0, E: 0, F: 0, U: 0, NG: 0 };
+  let itemsWithPlusMif = 0;
+  let noRatingCount = 0;
+
+  for (const item of allItems) {
+    if (!item || !item.rating) {
+      noRatingCount++;
+      continue;
     }
 
-    // ✅ Step 1: Safety remark overrides all (CHECK THIS FIRST)
-    if (this.hasSafetyRemark) {
-      console.log('🚨 SAFETY REMARK DETECTED - Setting grade to U');
-      this.overallGrade = 'U';
-      return;
+    if (item.rating === 'NG') {
+      console.log(`Skipping NG item for initial grade: ${item.name}`);
+      continue;
     }
 
-    // Flatten all items safely
-    const allItems = this.selectedFlightDomains.flatMap(
-      (m) => m.maneuverItems ?? []
-    );
-    const totalItems = allItems.length;
-
-    console.log('Total items:', totalItems);
-
-    if (totalItems === 0) {
-      console.log('No items found in selected maneuvers');
-      this.overallGrade = '-------';
-      return;
-    }
-
-    const ratingCount: Record<Rating, number> = {
-      G: 0,
-      E: 0,
-      F: 0,
-      U: 0,
-      NG: 0,
-    };
-
-    let noRatingCount = 0;
-
-    // ✅ Step 2: Count ratings safely
-    for (const item of allItems) {
-      if (!item || !item.rating) {
-        console.log('Item with no rating:', item?.name || 'Unknown item');
-        noRatingCount++;
-        continue;
-      }
-
+    if (item.mifRequirement?.startsWith('+')) {
       const rating = item.rating as Rating;
-      if (!(rating in ratingCount)) {
-        console.log('Invalid rating detected:', rating);
-        noRatingCount++;
-        continue;
-      }
-
       ratingCount[rating]++;
+      itemsWithPlusMif++;
+      console.log(`Counting +MIF item: ${item.name} rating=${rating}`);
+    }
+  }
+
+  // ✅ NEW: Block calculation if any unrated items found
+  if (noRatingCount > 0) {
+    console.log(`⛔ Found ${noRatingCount} items with no rating. Blocking calculation.`);
+    alert('All items must be rated.');
+    this.overallGrade = '-------';
+    return;
+  }
+
+  const percent = (count: number, total: number) =>
+    total > 0 ? (count / total) * 100 : 0;
+
+  console.log('Rating counts (+MIF only, no NG):', ratingCount);
+  console.log(`E %: ${percent(ratingCount['E'], itemsWithPlusMif)}`);
+  console.log(`G %: ${percent(ratingCount['G'], itemsWithPlusMif)}`);
+  console.log(`F %: ${percent(ratingCount['F'], itemsWithPlusMif)}`);
+  console.log(`U %: ${percent(ratingCount['U'], itemsWithPlusMif)}`);
+
+  if (percent(ratingCount['E'], itemsWithPlusMif) >= 40 && ratingCount['F'] === 0 && ratingCount['U'] === 0) {
+    this.overallGrade = 'E';
+  } else if ((percent(ratingCount['G'], itemsWithPlusMif) + percent(ratingCount['E'], itemsWithPlusMif) >= 40)
+             && ratingCount['U'] === 0) {
+    this.overallGrade = 'G';
+  } else if (ratingCount['U'] >= 3) {
+    this.overallGrade = 'U';
+  } else {
+    this.overallGrade = 'F';
+  }
+
+  console.log(`✅ Initial overall grade (+MIF only): ${this.overallGrade}`);
+
+  const overallWeight = ratingWeights[this.overallGrade as Rating] || 0;
+  let countedLines = 0;
+  let eligibleLines = 0;
+  let addedNonPlusMifItems = false;
+
+  const finalRatingCount: Record<Rating, number> = { G: 0, E: 0, F: 0, U: 0, NG: 0 };
+
+  for (const item of allItems) {
+    if (!item || !item.rating) continue;
+
+    const rating = item.rating as Rating;
+
+    if (rating === 'NG') {
+      console.log(`Skipping NG item in second pass: ${item.name}`);
+      continue;
     }
 
-    console.log('Rating counts:', ratingCount);
-    console.log('No rating count (null/undefined):', noRatingCount);
+    const currentWeight = ratingWeights[rating];
+    const hasPlusMif = item.mifRequirement?.startsWith('+') ?? false;
 
-    // ✅ Step 3: Handle unrated items (null/undefined ratings OR NG ratings)
-    if (noRatingCount > 0 || ratingCount['NG'] > 0) {
-      console.log('Setting to NG due to unrated items or NG ratings');
-      console.log('- Null/undefined ratings:', noRatingCount);
-      console.log('- NG ratings:', ratingCount['NG']);
-      this.overallGrade = 'NG';
-      return;
+    if (hasPlusMif) {
+      eligibleLines++;
+      countedLines++;
+      finalRatingCount[rating]++;
+      console.log(`Line counted (+MIF): ${item.name}, rating=${rating}`);
+    } else {
+      if (currentWeight >= overallWeight) {
+        eligibleLines++;
+        countedLines++;
+        finalRatingCount[rating]++;
+        addedNonPlusMifItems = true;
+        console.log(`Line counted (non-+MIF, rating OK): ${item.name}, rating=${rating}`);
+      } else {
+        console.log(`Skipping line (non-+MIF, rating too low): ${item.name}, rating=${rating}`);
+      }
     }
+  }
 
-    const percent = (count: number) => (count / totalItems) * 100;
+  console.log('Final rating counts (eligible lines):', finalRatingCount);
+  console.log(`Eligible lines: ${eligibleLines}`);
+  console.log(`Non-+MIF items added: ${addedNonPlusMifItems}`);
 
-    console.log('Percentages:');
-    console.log('E:', percent(ratingCount['E']) + '%');
-    console.log('G:', percent(ratingCount['G']) + '%');
-    console.log('F:', percent(ratingCount['F']) + '%');
-    console.log('U:', percent(ratingCount['U']) + '%');
+  if (addedNonPlusMifItems && eligibleLines > 0) {
+    console.log('Recalculating overall grade with all eligible lines.');
+    const percentFinal = (count: number) => (count / eligibleLines) * 100;
 
-    // ✅ Step 4: Grading rules (only for E, G, F, U ratings)
-    if (
-      percent(ratingCount['E']) >= 40 &&
-      ratingCount['F'] === 0 &&
-      ratingCount['U'] === 0
-    ) {
-      console.log('Setting to E: E% >= 40, no F, no U');
+    console.log(`E %: ${percentFinal(finalRatingCount['E'])}`);
+    console.log(`G %: ${percentFinal(finalRatingCount['G'])}`);
+    console.log(`F count: ${finalRatingCount['F']}`);
+    console.log(`U count: ${finalRatingCount['U']}`);
+
+    if (percentFinal(finalRatingCount['E']) >= 40 && finalRatingCount['F'] === 0 && finalRatingCount['U'] === 0) {
       this.overallGrade = 'E';
-    } else if (
-      percent(ratingCount['G']) + percent(ratingCount['E']) >= 40 &&
-      ratingCount['U'] === 0
-    ) {
-      console.log('Setting to G: (G+E)% >= 40, no U');
+    } else if ((percentFinal(finalRatingCount['G']) + percentFinal(finalRatingCount['E']) >= 40)
+               && finalRatingCount['U'] === 0) {
       this.overallGrade = 'G';
-    } else if (ratingCount['U'] >= 3) {
-      console.log('Setting to U: 3+ U ratings');
+    } else if (finalRatingCount['U'] >= 3) {
       this.overallGrade = 'U';
     } else {
-      console.log('Setting to F: default case');
       this.overallGrade = 'F';
     }
 
-    console.log('Final overall grade:', this.overallGrade);
-    console.log('=== END RATING CALCULATION ===');
+    console.log(`✅ Final overall grade recalculated: ${this.overallGrade}`);
+  } else {
+    console.log('No non-+MIF items qualified; keeping initial overall grade.');
   }
+
+  console.log(`Counted lines: ${countedLines}/${eligibleLines}`);
+  console.log('No rating count (null/undefined):', noRatingCount);
+  console.log('=== END RATING CALCULATION ===');
+}
+
+
+
+
 
   //  calculateOverallRating to handle Us (Safety Unsatisfactory)
   // Orange-section
-  // Initialize formData2 with default values
+  // ... (rest of the code remains the same)
   formData2 = {
     sortieStatus: '', // Stores the selected sortie status
     sortieRemarks: [] as string[], // Stores the selected sortie remarks (as an array)
