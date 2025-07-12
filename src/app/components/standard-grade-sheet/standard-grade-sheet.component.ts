@@ -45,6 +45,7 @@ export class StandardGradeSheetComponent {
 
   flightDomainsSyllabus: any[] = [];
   hasSafetyRemark = false;
+  PartiallyExecuted =false;
   comments: String = '';
 
   instructor: Instructor | undefined;
@@ -229,13 +230,6 @@ export class StandardGradeSheetComponent {
   //Partie-Comment
   overallGrade: String = '-------';
 
-  //  calculateOverallRating to handle Us (Safety Unsatisfactory)
- // ---------------------
-
-// ----------------------
-// ✅ Improved calculateOverallRating()
-// ----------------------
-
 calculateOverallRating(): void {
   console.log('=== STARTING RATING CALCULATION ===');
 
@@ -250,7 +244,11 @@ calculateOverallRating(): void {
     this.overallGrade = 'U';
     return;
   }
-
+  if (this.PartiallyExecuted) {
+    console.log('PartiallyExecuted selected, setting overall grade to NG');
+    this.overallGrade = 'NG';
+    return;
+  }
   const allItems = this.selectedFlightDomains.flatMap(
     (m) => m.maneuverItems ?? []
   );
@@ -413,6 +411,11 @@ calculateOverallRating(): void {
       this.formData2.sortieStatus = status; // Select the new status
     }
     console.log('Sortie Status:', this.formData2.sortieStatus);
+     // ✅ FIX: Update the Status flag to check for 'partially Executed' instead of 'Sortie Status'
+    this.PartiallyExecuted = this.formData2.sortieStatus.includes('PARTIALLY_EXECUTED')|| this.formData2.sortieStatus.includes('NON_EXECUTED');
+
+    // Recalculate grade when remarks change
+    this.calculateOverallRating();
   }
 
   // Handle Sortie Remarks Change
@@ -431,6 +434,7 @@ calculateOverallRating(): void {
     // Recalculate grade when remarks change
     this.calculateOverallRating();
   }
+
 
   // Yellow-section
   // Initialize formData with default values

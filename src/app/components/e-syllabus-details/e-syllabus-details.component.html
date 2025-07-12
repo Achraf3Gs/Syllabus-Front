@@ -15,41 +15,112 @@
   </div>
 
   <!-- Details Section -->
-  <div class="col-md-5 d-flex justify-content-center border-right">
+  <div class="col-md-2 d-flex align-items-center justify-content-center border-right">
     <div class="text-center w-100">
+   
       <div class="d-flex align-items-center mb-2">
         <fa-icon [icon]="faUser" class="me-2 blue-color"></fa-icon>
-        <span>Syllabus-Type</span>
+        <span *ngIf="student">{{ student.firstName }} {{ student.lastName }}</span>
+        <span *ngIf="!student">Loading student...</span>
       </div>
-      <div class="d-flex align-items-center mb-2">
-        <fa-icon [icon]="faUser" class="me-2 blue-color"></fa-icon>
-        <span>FirstName & LastName</span>
-      </div>
-      <div class="d-flex align-items-center mb-2">
+         <div class="d-flex align-items-center mb-2">
         <fa-icon [icon]="faInfo" class="me-2 blue-color"></fa-icon>
-        <span>Grade</span>
+        <span>Student Grade: {{ student?.grade || 'Not assigned' }}</span>
       </div>
+
       <div class="d-flex align-items-center mb-2">
         <fa-icon [icon]="faHeadset" class="me-2 blue-color"></fa-icon>
-        <span>Call Sign</span>
+        <span>Call Sign: {{ student?.callSign || 'Not assigned' }}</span>
       </div>
     </div>
   </div>
 
   <!-- E-Syllabus Section -->
   <div
-    class="col-md-3 d-flex align-items-center justify-content-center border-right"
+    class="col-md-6 d-flex align-items-center justify-content-center border-right"
   >
     <div class="text-center">
       <div class="d-flex align-items-center mb-2">
-        <button
-          type="button"
-          class="btn btn-link p-0 w-100"
-          (click)="goToSyllabusDetails()"
-        >
-          <fa-icon [icon]="faBook"></fa-icon><br />
-          Syllabus-Details
-        </button>
+             <!-- Loading State -->
+      <div *ngIf="isLoadingSyllabi" class="text-center py-2">
+        <fa-icon [icon]="faSpinner" class="me-2 fa-spin"></fa-icon>
+        <span>Loading syllabi...</span>
+      </div>
+
+      <!-- Error State -->
+      <div *ngIf="error && !isLoadingSyllabi" class="alert alert-danger py-2 my-2">
+        <fa-icon [icon]="faCircleInfo" class="me-2"></fa-icon>
+        {{ error }}
+      </div>
+
+      <!-- Syllabus List -->
+      <div *ngIf="syllabi.length > 0" class="mt-3">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h6 class="mb-0">Assigned Syllabus</h6>
+          <div class="text-muted small">
+            Showing {{ syllabi.length }} item{{ syllabi.length !== 1 ? 's' : '' }}
+          </div>
+        </div>
+        
+        <div class="table-responsive">
+          <table class="table table-hover align-middle">
+            <thead class="table-light">
+              <tr>
+                <th>Title</th>
+                <th>Status</th>
+                <th>Progress</th>
+                <th>Assigned</th>
+                <th class="text-end">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of syllabi" class="cursor-pointer" (click)="viewSyllabusDetails(item)">
+                <td>
+                  <div class="fw-medium">{{ item.syllabusName || 'Untitled Syllabus' }}</div>
+                  <div *ngIf="item.notes" class="small text-muted text-truncate" style="max-width: 200px;">
+                    {{ item.notes }}
+                  </div>
+                </td>
+                <td>
+                  <span class="badge" [ngClass]="statusClassMap[item.status] || 'bg-secondary'">
+                    {{ statusMap[item.status] || (item.status | titlecase) }}
+                  </span>
+                </td>
+                <td>
+                  <div class="progress" style="height: 6px; width: 100px;">
+                    <div class="progress-bar bg-primary" 
+                         role="progressbar" 
+                         [style.width.%]="item.progress || 0" 
+                         [attr.aria-valuenow]="item.progress || 0" 
+                         aria-valuemin="0" 
+                         aria-valuemax="100">
+                    </div>
+                  </div>
+                  <div class="small text-muted mt-1">{{ item.progress || 0 }}% complete</div>
+                </td>
+                <td>
+                  <div>{{ (item.assignedDate | date:'mediumDate') || 'N/A' }}</div>
+                  <div *ngIf="item.completionDate" class="small text-muted">
+                    Completed: {{ item.completionDate | date:'shortDate' }}
+                  </div>
+                </td>
+                <td class="text-end">
+                  <button class="btn btn-sm btn-outline-primary" (click)="$event.stopPropagation(); viewSyllabusDetails(item)">
+                    <fa-icon [icon]="faEye" class="me-1"></fa-icon> Details
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- No Syllabi State -->
+      <div *ngIf="syllabi.length === 0 && !isLoadingSyllabi && !error" class="text-center py-5 my-3 bg-light rounded">
+        <fa-icon [icon]="faBook" class="text-muted mb-3" size="3x"></fa-icon>
+        <h5 class="text-muted">No Syllabi Assigned</h5>
+        <p class="text-muted mb-0">This student doesn't have any syllabi assigned yet.</p>
+      </div>
       </div>
     </div>
   </div>
@@ -58,19 +129,8 @@
   <div class="col-md-3 d-flex align-items-center justify-content-center">
     <div class="w-100 text-center">
       <div class="row">
-        <div class="col-6">
-          <!-- Button trigger modal -->
-          <button
-            type="button"
-            class="btn btn-link p-0 w-100"
-            data-bs-toggle="modal"
-            data-bs-target="#exampleModal"
-          >
-            <fa-icon [icon]="faPen"></fa-icon><br />
-            Modify
-          </button>
-        </div>
-        <div class="col-6">
+      
+        <div class="col-12">
           <button
             type="button"
             class="btn btn-link p-0 w-100"

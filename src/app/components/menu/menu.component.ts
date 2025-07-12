@@ -86,7 +86,7 @@ export class MenuComponent {
         },
         {
           id: '32',
-          title: 'E-Syllabus',
+          title: 'Students-Syllabus',
           icon: faBook,
           url: 'dashboard/esyllabus',
         },

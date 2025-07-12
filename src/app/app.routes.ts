@@ -34,6 +34,7 @@ import { PageSortiesTpyesComponent } from './SortiesTypes/page-sorties-tpyes/pag
 import { StandardGradeSheetComponent } from './components/standard-grade-sheet/standard-grade-sheet.component';
 import { FlightDoaminSyllabusTemplateComponent } from './pageFlightDomainSyllabus/flight-doamin-syllabus-template/flight-doamin-syllabus-template.component';
 import { UpdateGradeSheetComponent } from './pageFlightDomainSyllabus/update-grade-sheet/update-grade-sheet.component';
+import { NewstudentSyllabusComponent } from './students/newstudent-syllabus/newstudent-syllabus.component';
 
 export const routes: Routes = [
   {
@@ -97,6 +98,10 @@ export const routes: Routes = [
       {
         path: 'newstudent',
         component: NewStudentComponent,
+      },
+      {
+        path: 'newstudent-syllabus',
+        component: NewstudentSyllabusComponent,
       },
       {
         path: 'newinstructor',

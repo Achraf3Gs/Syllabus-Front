@@ -2,20 +2,34 @@
   <!-- Header Row -->
   <div class="row m-3">
     <div class="col-md-8 p-0">
-      <h1>Liste of Syllabus</h1>
+      <h1>List Of Students Syllabus</h1>
     </div>
     <div class="col-md-4 text-end">
-      <app-esyllabus-button> </app-esyllabus-button>
+      <button type="button" class="btn btn-primary" (click)="goToNewStudentSyllabus()">
+        +Add Student-Syllabus
+      </button>
     </div>
   </div>
 
+  <!-- Loading and Error States -->
+  <div *ngIf="isLoading" class="text-center p-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+    <p class="mt-2">Loading students...</p>
+  </div>
+
+  <div *ngIf="error" class="alert alert-danger m-3" role="alert">
+    {{ error }}
+  </div>
+
   <!-- E-Syllabus Details List -->
-  <div class="row m-3">
-    <div class="accordion" id="accordionExample">
-      <div class="accordion-item mb-2">
-        <!-- First Row: E-Syllabus Details -->
+  <div class="row m-3" *ngIf="!isLoading && !error">
+    <div class="accordion" id="studentAccordion">
+      <div *ngFor="let student of students; let i = index" class="accordion-item mb-2">
+        <!-- Student Syllabus Details -->
         <div class="row p-3">
-          <app-e-syllabus-details></app-e-syllabus-details>
+          <app-e-syllabus-details [student]="student"></app-e-syllabus-details>
         </div>
 
         <!-- Second Row: Accordion Header -->

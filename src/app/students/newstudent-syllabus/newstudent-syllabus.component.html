@@ -1,0 +1,102 @@
+<div class="col ms-3 mb-3">
+  <!-- Image Section -->
+  <div class="col-md-12 mb-3 mt-3 ">
+    <img
+      src="/images/MANEUVER.jpg"
+      class="rounded-circle"
+      width="200px"
+      height="200px"
+    />
+  </div>
+
+  <!-- Header -->
+  <div class="col-md-12 ms-3 pe-4">
+    <hr />
+   
+   
+
+    <!-- Form -->
+  <div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h2>Assign Syllabus to Student</h2>
+      <a routerLink="/dashboard/esyllabus" class="btn btn-outline-secondary">
+        <i class="bi bi-arrow-left"></i> Back to List of Students Syllabus
+      </a>
+    </div>
+    
+    <div class="card">
+      <div class="card-body">
+        <form (ngSubmit)="onSave()">
+          <!-- Student Selection -->
+          <div class="mb-4">
+            <label for="studentSelect" class="form-label fw-bold">Student</label>
+            <select 
+              id="studentSelect" 
+              class="form-select form-select-lg"
+              [(ngModel)]="selectedStudentId"
+              name="studentSelect"
+              (change)="onStudentSelect($event)"
+              [disabled]="isSaving"
+              required>
+              <option [ngValue]="null">-- Select a student --</option>
+              <option *ngFor="let student of studentList" [value]="student.id">
+                {{ student.firstName }} {{ student.lastName }}
+                <span *ngIf="student.callSign">({{ student.callSign }})</span> (ID: {{ student.id }})
+              </option>
+            </select>
+            <div *ngIf="selectedStudentId" class="mt-2 text-muted">
+              Selected Student ID: {{ selectedStudentId }}
+            </div>
+          </div>
+
+          <!-- Syllabus Selection -->
+          <div class="mb-4">
+            <label for="syllabusSelect" class="form-label fw-bold">Syllabus</label>
+            <select 
+              id="syllabusSelect" 
+              class="form-select form-select-lg"
+              [(ngModel)]="selectedSyllabusId"
+              name="syllabusSelect"
+              [disabled]="isSaving || !selectedStudentId"
+              (change)="onSyllabusSelect($event)"
+              required>
+              <option [value]="">-- Select a syllabus --</option>
+              <option *ngFor="let syllabus of syllabusList" [value]="syllabus.id">
+                {{ syllabus.title }} (ID: {{ syllabus.id }})
+              </option>
+            </select>
+            <div *ngIf="selectedSyllabusId" class="mt-2 text-muted">
+              Selected Syllabus ID: {{ selectedSyllabusId }}
+            </div>
+          </div>
+
+          <!-- Error Message -->
+          <div *ngIf="errorMessage" class="alert alert-danger">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+            {{ errorMessage }}
+          </div>
+
+          <!-- Buttons -->
+          <div class="d-flex justify-content-end gap-2 mt-4">
+            <button 
+              type="button" 
+              class="btn btn-outline-secondary" 
+              [disabled]="isSaving"
+              (click)="onCancel()">
+              <i class="bi bi-x-lg me-1"></i> Cancel
+            </button>
+            <button 
+              type="submit" 
+              class="btn btn-primary" 
+              [disabled]="isSaving || !selectedStudentId || !selectedSyllabusId">
+              <span *ngIf="isSaving" class="spinner-border spinner-border-sm me-1"></span>
+              <i class="bi bi-save me-1"></i>
+              {{ isSaving ? 'Assigning...' : 'Assign Syllabus' }}
+            </button>
+          </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
